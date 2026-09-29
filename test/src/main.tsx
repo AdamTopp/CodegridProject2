@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import ProjectOne from './projects/project1-scroller/projectOne.tsx'
+import ProjectOne from './projects/project1-scroller/projectOneReact.tsx'
 
 //GSAP config
 import { gsap } from "gsap";

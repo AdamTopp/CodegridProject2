@@ -74,6 +74,7 @@ const ProjectOne = () => {
     const animationRef = useRef(0);
     const targetYRef = useRef(0);
     const currentYRef = useRef(0);
+    const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const paralaxMapRef = useRef<Map<number, ParalaxInfo>>(new Map());
     const projectListRef = useRef<HTMLUListElement>(null);
     const minimapListRef = useRef<HTMLUListElement>(null);
@@ -181,15 +182,33 @@ const ProjectOne = () => {
             );
             setScrollInfo((p) => ({
                 lastScrollTime: Date.now(),
-                targetY: p.targetY -= delta,
+                targetY: p.targetY - delta,
                 isSnapping: false,
                 isDragging: false,
             }));
+
+            if (scrollTimeoutRef.current) {
+                clearTimeout(scrollTimeoutRef.current);
+            }
+
+            scrollTimeoutRef.current = setTimeout(() => {
+                console.log('Scroll Finished');
+                setScrollInfo((p) => {
+                    const snapPoint = -Math.round(-p.targetY / window.innerHeight) * window.innerHeight;
+                    return ({
+                        ...p,
+                        targetY: snapPoint
+                    })
+                });
+            }, 700);
         }
         window.addEventListener("wheel", onScroll)
 
         return () => {
             window.removeEventListener("wheel", onScroll)
+            if (scrollTimeoutRef.current) {
+                clearTimeout(scrollTimeoutRef.current);
+            }
         }
     }, []);
 

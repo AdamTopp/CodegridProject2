@@ -81,11 +81,13 @@
         height: 100%;
         will-change: transform;
         overflow: hidden;
+        transform: translateY(var(--currentY));
 
         & img {
             position: relative;
             transform: scale(1.5);
             will-change: transform;
+            transform: translateY(var(--currentY)) scale(1.5);
         }
     }
 

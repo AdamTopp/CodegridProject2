@@ -1,5 +1,5 @@
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './projectOne.module.scss';
 
 interface Data {
@@ -22,6 +22,7 @@ export interface Project extends Data {
 
 export interface ScrollInfo {
     targetY: number;
+    lastTouchY: number;
     lastScrollTime: number;
     isSnapping: boolean;
     isDragging: boolean;
@@ -55,16 +56,17 @@ const projectData: Data[] = [
 ];
 
 const config = {
-    SCROLL_SPEED: 0.75,
+    SCROLL_SPEED: 5,
     LERP_FACTOR: 0.05,
     BUFFER_SIZE: 4,
-    MAX_VELOCITY: 150,
+    MAX_VELOCITY: 250,
     SNAP_DURATION: 500,
 };
 
 const ProjectOne = () => {
     const [scrollInfo, setScrollInfo] = useState<ScrollInfo>({
         targetY: 0,
+        lastTouchY: 0,
         isSnapping: false,
         isDragging: false,
         lastScrollTime: Date.now(),
@@ -154,17 +156,37 @@ const ProjectOne = () => {
         animationRef.current = requestAnimationFrame(animate);
     };
 
+    const snapTimeout = () => {
+        if (scrollTimeoutRef.current) {
+            clearTimeout(scrollTimeoutRef.current);
+        }
+        scrollTimeoutRef.current = setTimeout(() => {
+            setScrollInfo((p) => {
+                const snapPoint = -Math.round(-p.targetY / window.innerHeight) * window.innerHeight;
+                return ({
+                    ...p,
+                    targetY: snapPoint
+                })
+            });
+        }, 700);
+    }
+
+    const createContainers = (tY: number) => {
+        console.log('windowinner: ', window.innerHeight)
+        const currentIndex = Math.round(-tY / window.innerHeight);
+        const min = currentIndex - config.BUFFER_SIZE;
+        const max = currentIndex + config.BUFFER_SIZE;
+        setProjects((p) => createProjects(p, min, max))
+    };
+
     useEffect(() => {
         animationRef.current = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(animationRef.current);
     }, []);
 
     useEffect(() => {
-        const currentIndex = Math.round(-scrollInfo.targetY / window.innerHeight);
-        const min = currentIndex - config.BUFFER_SIZE;
-        const max = currentIndex + config.BUFFER_SIZE;
-        setProjects((p) => createProjects(p, min, max))
-    }, [scrollInfo.targetY, window.innerHeight]);
+        createContainers(scrollInfo.targetY)
+    }, [scrollInfo.targetY]);
 
     useEffect(() => {
         setProjects((p) => createProjects(p, -config.BUFFER_SIZE, config.BUFFER_SIZE))
@@ -181,36 +203,73 @@ const ProjectOne = () => {
                 -config.MAX_VELOCITY
             );
             setScrollInfo((p) => ({
+                ...p,
                 lastScrollTime: Date.now(),
                 targetY: p.targetY - delta,
                 isSnapping: false,
                 isDragging: false,
             }));
 
-            if (scrollTimeoutRef.current) {
-                clearTimeout(scrollTimeoutRef.current);
-            }
-
-            scrollTimeoutRef.current = setTimeout(() => {
-                console.log('Scroll Finished');
-                setScrollInfo((p) => {
-                    const snapPoint = -Math.round(-p.targetY / window.innerHeight) * window.innerHeight;
-                    return ({
-                        ...p,
-                        targetY: snapPoint
-                    })
-                });
-            }, 700);
+            snapTimeout();
         }
-        window.addEventListener("wheel", onScroll)
+
+        const onTouchStart = (e: TouchEvent) => {
+            setScrollInfo((p) => {
+                return ({
+                    ...p,
+                    lastTouchY: e.touches[0].clientY
+                })
+            })
+        }
+
+        const onTouchMove = (e: TouchEvent) => {
+            setScrollInfo((p) => {
+                const drag = e.touches[0].clientY - p.lastTouchY; 
+                return ({
+                    ...p,
+                    lastTouchY: e.touches[0].clientY,
+                    targetY: p.targetY + drag * 2.5
+                })
+            })
+
+            snapTimeout();
+        }
+
+        const onTouchEnd = (e: TouchEvent) => {
+            setScrollInfo((p) => ({
+                ...p,
+                lastTouchY: 0,
+            }))
+        }
+
+        window.addEventListener("wheel", onScroll);
+        window.addEventListener("touchstart", onTouchStart);
+        window.addEventListener("touchmove", onTouchMove);
+        window.addEventListener("touchend", onTouchEnd);
 
         return () => {
-            window.removeEventListener("wheel", onScroll)
+            window.removeEventListener("wheel", onScroll);
+            window.removeEventListener("touchstart", onTouchStart);
+            window.removeEventListener("touchmove", onTouchMove);
+            window.removeEventListener("touchend", onTouchEnd);
             if (scrollTimeoutRef.current) {
                 clearTimeout(scrollTimeoutRef.current);
             }
         }
     }, []);
+
+    useEffect(() => {
+        const onResize = (e: any) => {
+            snapTimeout();
+            createContainers(scrollInfo.targetY);
+        }
+
+        window.addEventListener('resize', onResize)
+
+        return () => {
+            window.removeEventListener("resize", onResize);
+        }
+    }, [scrollInfo.targetY]);
 
     return (
         <div className={styles.wrapper}>

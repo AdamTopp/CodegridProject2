@@ -12,6 +12,7 @@ interface Data {
 interface ParalaxInfo {
     imgOffset: number;
     miniImgOffset: number;
+    descriptionOffset: number;
 }
 
 
@@ -80,6 +81,7 @@ const ProjectOne = () => {
     const paralaxMapRef = useRef<Map<number, ParalaxInfo>>(new Map());
     const projectListRef = useRef<HTMLUListElement>(null);
     const minimapListRef = useRef<HTMLUListElement>(null);
+    const descriptionListRef = useRef<HTMLUListElement>(null);
 
     const lerp = (start: number, end: number, factor: number) => start + (end - start) * factor;
 
@@ -92,7 +94,7 @@ const ProjectOne = () => {
         for(let i = min; i <= max; i++) {
             const paralaxExists = paralaxMapRef.current.has(i)
             if (!paralaxExists) {
-                paralaxMapRef.current.set(i, { imgOffset: 0, miniImgOffset: 0 })
+                paralaxMapRef.current.set(i, { imgOffset: 0, miniImgOffset: 0, descriptionOffset: 0 })
             }
             const existing = prev.find((o) => o.index === i);
             if (existing) {
@@ -127,18 +129,23 @@ const ProjectOne = () => {
                     htmlEl.dataset.projectIndex
                 );
                 const paralaxCurrent = paralaxMapRef.current.get(ind);
-                const divTargetY = ind * height + elementY;
+                const divTargetY = (ind * height + elementY);
                 const imgTargetY = (-elementY - ind * height) * 0.2;
                 let imgCurrentY = imgTargetY;
                 if (paralaxCurrent) {
                     imgCurrentY = lerp(paralaxCurrent[paralaxKey], imgTargetY, 0.08);
                     paralaxMapRef.current.set(ind, { ...paralaxCurrent, [paralaxKey]: imgCurrentY });
                 }
-
+                
                 htmlEl.style.setProperty('--currentY', `${divTargetY.toString()}px`);
+                if (paralaxKey !== 'descriptionOffset') {
                 if (Math.abs(imgCurrentY - imgTargetY) > 0.01) {
-                    imgEl.style.setProperty('--currentY', `${imgCurrentY.toString()}px`);
+                    for (let ch of htmlEl.children) {
+                        const childElement = ch as HTMLElement;
+                        childElement.style.setProperty('--currentY', `${imgCurrentY.toString()}px`);
+                    }
                 }
+            }
             } 
         }
     }
@@ -150,8 +157,10 @@ const ProjectOne = () => {
 
         const projectWrapper = projectListRef?.current;
         const minimapWrapper = minimapListRef?.current;
+        const descriptionWrapper = descriptionListRef?.current;
         updateElements(projectWrapper, window.innerHeight, cY, "imgOffset");
         updateElements(minimapWrapper, minimapHeight, cY * minimapHeight / window.innerHeight, 'miniImgOffset');
+        updateElements(descriptionWrapper, minimapHeight, cY * minimapHeight / window.innerHeight, 'descriptionOffset');
         
         animationRef.current = requestAnimationFrame(animate);
     };
@@ -172,7 +181,6 @@ const ProjectOne = () => {
     }
 
     const createContainers = (tY: number) => {
-        console.log('windowinner: ', window.innerHeight)
         const currentIndex = Math.round(-tY / window.innerHeight);
         const min = currentIndex - config.BUFFER_SIZE;
         const max = currentIndex + config.BUFFER_SIZE;
@@ -294,7 +302,22 @@ const ProjectOne = () => {
                             )
                         })}
                     </ul>
-                    <div className={styles['minimap-info-list']}></div>
+                    <ul className={styles['minimap-info-list']} ref={descriptionListRef}>
+                        {projects.map((project) => {
+                            return (
+                                <div key={`minimap-${project.title}-ind${project.index}`} className={styles['minimap-info-item']} data-project-index={project.index}>
+                                    <div className={styles['minimap-info-item-row']}>
+                                        <p>01</p>
+                                        <p>{project.title}</p>
+                                    </div>
+                                    <div className={styles['minimap-info-item-row']}>
+                                        <p>{project.category}</p>
+                                        <p>{project.year}</p>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </ul>
                 </div>
             </div>
         </div>

@@ -107,12 +107,15 @@
         flex-direction: column;
         justify-content: space-between;
         will-change: transform;
+        transform: translateY(var(--currentY));
 
         &-row {
             width: 100%;
             display: flex;
             justify-content: space-between;
             padding: 0.5rem;
+            color: black;
+            transform: translateY(var(--currentY));
 
             @media (max-width: 1000px) {
                 flex-direction: column;

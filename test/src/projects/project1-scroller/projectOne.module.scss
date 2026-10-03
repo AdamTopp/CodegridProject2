@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
 
 .wrapper {
     font-family: "Inter", sans-serif;
@@ -48,10 +49,12 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 75%;
-    height: calc(250px + 3rem); // ???
-    background-color: white;
+    max-width: 1230px;
+    min-height: 200px;
+    height: 20svh; // ???
+    // background-color: white;
     padding: 1.5rem;
-    overflow: hidden;
+    overflow: visible;
 
     &-wrapper {
         position: relative;
@@ -65,9 +68,9 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 35%;
-        height: 100%;
+        height: 0;
         overflow: hidden;
+        aspect-ratio: 16 / 10;
 
         @media (max-width: 1000px) {
             left: unset;
@@ -86,9 +89,8 @@
 
         & img {
             position: relative;
-            transform: scale(1.5);
             will-change: transform;
-            transform: translateY(var(--currentY)) scale(1.5);
+            transform: translateY(var(--currentY)) scale(2.5);
         }
     }
 
@@ -102,7 +104,7 @@
     &-info-item {
         position: absolute;
         width: 100%;
-        height: 250px;
+        height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -116,10 +118,92 @@
             padding: 0.5rem;
             color: black;
             transform: translateY(var(--currentY));
+            font-family: "Oswald";
+            overflow: hidden;
+
+            & p {
+                font-size: 18px;
+                font-weight: 900;
+                letter-spacing: -5%;
+                line-height: 1;
+            }
 
             @media (max-width: 1000px) {
                 flex-direction: column;
             }
         }
+    }
+}
+
+.topRow {
+    transform: translateY(-150%);
+}
+
+.botRow {
+    transform: translateY(150%);
+}
+
+.minimapBackground {
+    background: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    // width: 60%;
+    width: 0;
+    height: 13%;
+}
+
+.letter {
+    position: absolute;
+    font-family: "Oswald";
+    font-size: clamp(20px, 13vw, 160px);
+    font-weight: 700;
+    line-height: 1;
+    overflow: hidden;
+    & > div {
+        transform: translateY(100%);
+    }
+
+    &Left {
+        left: 0;
+        top: 50%;
+        transform: translate(calc(-100% - 48px), -50%);
+    }
+
+    &Right {
+        right: 0;
+        top: 50%;
+        transform: translate(calc(100% + 48px), -50%);
+    }
+}
+
+.text {
+    position: absolute;
+    font-size: clamp(12px, 2vw, 20px);
+    text-transform: uppercase;
+    font-family: "Oswald";
+    overflow: hidden;
+
+    & > div {
+        transform: translateY(100%);
+    }
+
+    &1 {
+        left: 0;
+        top: 0;
+        transform: translateY(calc(-100% - 24px));
+    }
+
+    &2 {
+        left: 50%;
+        bottom: 0;
+        transform: translate(-50%, calc(100% + 24px));
+    }
+
+    &3 {
+        right: 0;
+        top: 0;
+        transform: translateY(calc(-100% - 24px));
     }
 }

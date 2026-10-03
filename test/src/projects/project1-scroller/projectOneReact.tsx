@@ -1,6 +1,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './projectOne.module.scss';
+import { useGSAP } from '@gsap/react';
+import { gsap } from "gsap";
 
 interface Data {
     title: string;
@@ -64,6 +66,8 @@ const config = {
     SNAP_DURATION: 500,
 };
 
+gsap.registerPlugin(useGSAP);
+
 const ProjectOne = () => {
     const [scrollInfo, setScrollInfo] = useState<ScrollInfo>({
         targetY: 0,
@@ -83,6 +87,65 @@ const ProjectOne = () => {
     const minimapListRef = useRef<HTMLUListElement>(null);
     const descriptionListRef = useRef<HTMLUListElement>(null);
 
+    const middleSectionGrow = () => {
+        const tl = gsap.timeline()
+        tl.to(`.${styles.minimapBackground}`, { width: '40%', duration: 1, delay: 0.3, ease: 'power1.inOut' });
+        return tl;
+    }
+
+    const middleSectionExand = () => {
+        const tl = gsap.timeline()
+        tl.to(`.${styles.minimapBackground}`, { width: '100%', height: '100%', duration: 1, delay: 0, ease: 'expo.inOut' });
+        return tl;
+    }
+
+    const minimapExpand = () => {
+        const tl = gsap.timeline()
+        tl.to(`.${styles['minimap-img-preview']}`, { height: '100%', duration: 1, delay: 0, ease: 'expo.inOut' })
+        return tl;
+    }
+
+    const textAppear = (c: string) => {
+        const tl = gsap.timeline()
+        tl.to(`.${c} > div`, { transform: 'translateY(0)', duration: 0.5, ease: 'power1.inOut' });
+        return tl;
+    }
+
+    const rowsAppear = () => {
+        const tl = gsap.timeline()
+        tl.to(`.${styles.topRow}`, { transform: 'translateY(0)', duration: 0.5, ease: 'power1.inOut' })
+        .to(`.${styles.botRow}`, { transform: 'translateY(0)', duration: 0.5, ease: 'power1.inOut' });
+        return tl;
+    }
+
+    const textHide = () => {
+        const tl = gsap.timeline()
+        tl.to(`.${styles.letterRight} > div`, { transform: 'translateY(100%)', duration: 0.3, delay: 0.8, ease: 'power1.inOut' })
+        .to(`.${styles.text3} > div`, { transform: 'translateY(100%)', duration: 0.3, ease: 'power1.inOut' }, "-=0.2")
+        .to(`.${styles.text2} > div`, { transform: 'translateY(100%)', duration: 0.3, ease: 'power1.inOut' }, "-=0.2")
+        .to(`.${styles.text1} > div`, { transform: 'translateY(100%)', duration: 0.3, ease: 'power1.inOut' }, "-=0.2")
+        .to(`.${styles.letterLeft} > div`, { transform: 'translateY(100%)', duration: 0.3, ease: 'power1.inOut' }, "-=0.2");
+        return tl;
+    }
+
+    useGSAP(() => {
+        // gsap code here...
+        // gsap.to(`.${styles['minimap-img-preview']}`, { x: 360 });
+        const main = gsap.timeline();
+        main
+            .add(middleSectionGrow())
+            .add(textAppear(styles.letterLeft), "-=0.2")
+            .add(textAppear(styles.text1), "-=0.2")
+            .add(textAppear(styles.text2), "-=0.4")
+            .add(textAppear(styles.text3), "-=0.4")
+            .add(textAppear(styles.letterRight), "-=0.4")
+            .add(textHide())
+            .add(middleSectionExand())
+            .add(minimapExpand(), "-=0.6")
+            .add(rowsAppear())
+        main.play();
+        
+    });
     const lerp = (start: number, end: number, factor: number) => start + (end - start) * factor;
 
     const getProjectIndex = (index: number) => {
@@ -292,6 +355,23 @@ const ProjectOne = () => {
                 })}
             </ul>
             <div className={styles.minimap}>
+                <div className={styles.minimapBackground}>
+                    <div className={`${styles.letter} ${styles.letterLeft}`}>
+                        <div>C</div>
+                    </div>
+                    <div className={`${styles.letter} ${styles.letterRight}`}>
+                        <div>M</div>
+                    </div>
+                    <div className={`${styles.text} ${styles.text1}`}>
+                        <div>Claude</div>
+                    </div>
+                    <div className={`${styles.text} ${styles.text2}`}>
+                        <div>Lillies</div>
+                    </div>
+                    <div className={`${styles.text} ${styles.text3}`}>
+                        <div>Monet</div>
+                    </div>
+                </div>
                 <div className={styles['minimap-wrapper']}>
                     <ul className={styles['minimap-img-preview']} ref={minimapListRef}>
                         {projects.map((project) => {
@@ -306,13 +386,13 @@ const ProjectOne = () => {
                         {projects.map((project) => {
                             return (
                                 <div key={`minimap-${project.title}-ind${project.index}`} className={styles['minimap-info-item']} data-project-index={project.index}>
-                                    <div className={styles['minimap-info-item-row']}>
-                                        <p>01</p>
-                                        <p>{project.title}</p>
+                                    <div className={`${styles['minimap-info-item-row']} ${styles.topRow}`}>
+                                        <p className={styles.topRow}>01</p>
+                                        <p className={styles.topRow}>{project.title}</p>
                                     </div>
-                                    <div className={styles['minimap-info-item-row']}>
-                                        <p>{project.category}</p>
-                                        <p>{project.year}</p>
+                                    <div className={`${styles['minimap-info-item-row']} ${styles.botRow}`}>
+                                        <p className={styles.botRow}>{project.category}</p>
+                                        <p className={styles.botRow}>{project.year}</p>
                                     </div>
                                 </div>
                             )

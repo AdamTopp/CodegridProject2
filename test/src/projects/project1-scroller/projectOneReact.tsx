@@ -77,7 +77,8 @@ const ProjectOne = () => {
         lastScrollTime: Date.now(),
     });   
     const [projects, setProjects] = useState<Project[]>([]);
-    const minimapHeight = 250;
+    const [animationComplete, setAnimationComplete] = useState(false);
+    const [animationComplete2, setAnimationComplete2] = useState(false);
     const animationRef = useRef(0);
     const targetYRef = useRef(0);
     const currentYRef = useRef(0);
@@ -101,20 +102,22 @@ const ProjectOne = () => {
 
     const minimapExpand = () => {
         const tl = gsap.timeline()
-        tl.to(`.${styles['minimap-img-preview']}`, { height: '100%', duration: 1, delay: 0, ease: 'expo.inOut' })
+        tl.to(`.${styles['minimap-img-preview']}`, { height: '100%', duration: 1.3, delay: 0, clearProps: 'transform', ease: 'back.inOut' })
+        .fromTo(`.${styles['minimap-img-item']} > img`, { transform: 'translateY(var(--currentY)) scale(3)' }, { transform: 'translateY(var(--currentY)) scale(1.5)', clearProps: 'transform', duration: 1.5, delay: 0, ease: 'back.inOut' }, "<")
+        
         return tl;
     }
 
     const textAppear = (c: string) => {
         const tl = gsap.timeline()
-        tl.to(`.${c} > div`, { transform: 'translateY(0)', duration: 0.5, ease: 'power1.inOut' });
+        tl.to(`.${c} > div`, { transform: 'translateY(0)', duration: 0.5, ease: 'power3.inOut' });
         return tl;
     }
 
     const rowsAppear = () => {
         const tl = gsap.timeline()
-        tl.to(`.${styles.topRow}`, { transform: 'translateY(0)', duration: 0.5, ease: 'power1.inOut' })
-        .to(`.${styles.botRow}`, { transform: 'translateY(0)', duration: 0.5, ease: 'power1.inOut' });
+        tl.fromTo(`.${styles['minimap-info-item-row']}:nth-child(1) p`, { transform: 'translateY(-150%)', opacity: '0' }, { transform: 'translateY(0)', opacity: '100%', duration: 1.2, ease: 'power3.inOut', clearProps: 'transform' })
+        .fromTo(`.${styles['minimap-info-item-row']}:nth-child(2) p`, { transform: 'translateY(150%)', opacity: '0' }, { transform: 'translateY(0)', opacity: '100%', duration: 1.2, ease: 'power3.inOut', clearProps: 'transform' }, "<");
         return tl;
     }
 
@@ -128,10 +131,18 @@ const ProjectOne = () => {
         return tl;
     }
 
+    const onCompleteBase = () => {
+        setAnimationComplete(true);
+    }
+
+    const onCompleteContent = () => {
+        setAnimationComplete2(true);
+    }
+
     useGSAP(() => {
         // gsap code here...
         // gsap.to(`.${styles['minimap-img-preview']}`, { x: 360 });
-        const main = gsap.timeline();
+        const main = gsap.timeline({ onComplete: onCompleteBase });
         main
             .add(middleSectionGrow())
             .add(textAppear(styles.letterLeft), "-=0.2")
@@ -139,13 +150,23 @@ const ProjectOne = () => {
             .add(textAppear(styles.text2), "-=0.4")
             .add(textAppear(styles.text3), "-=0.4")
             .add(textAppear(styles.letterRight), "-=0.4")
-            .add(textHide())
-            .add(middleSectionExand())
-            .add(minimapExpand(), "-=0.6")
-            .add(rowsAppear())
+            // .add(minimapExpand(), "-=0.6")
+            // .add(rowsAppear())
         main.play();
         
     });
+
+    useGSAP(() => {
+        if (animationComplete && projects.length > 0 && !animationComplete2) {
+            const main = gsap.timeline({ onComplete: onCompleteContent });
+            main
+                .add(textHide())
+                .add(middleSectionExand())
+                .add(minimapExpand(), "-=1")
+                .add(rowsAppear(), "-=1")
+            main.play();
+        }
+    }, [projects, animationComplete]);
     const lerp = (start: number, end: number, factor: number) => start + (end - start) * factor;
 
     const getProjectIndex = (index: number) => {
@@ -221,9 +242,11 @@ const ProjectOne = () => {
         const projectWrapper = projectListRef?.current;
         const minimapWrapper = minimapListRef?.current;
         const descriptionWrapper = descriptionListRef?.current;
+        const mH = minimapWrapper?.clientHeight ? minimapWrapper.clientHeight : 250;
+        const dH = descriptionWrapper?.clientHeight ? descriptionWrapper.clientHeight : 250;
         updateElements(projectWrapper, window.innerHeight, cY, "imgOffset");
-        updateElements(minimapWrapper, minimapHeight, cY * minimapHeight / window.innerHeight, 'miniImgOffset');
-        updateElements(descriptionWrapper, minimapHeight, cY * minimapHeight / window.innerHeight, 'descriptionOffset');
+        updateElements(minimapWrapper, mH, cY * mH / window.innerHeight, 'miniImgOffset');
+        updateElements(descriptionWrapper, dH, cY * dH / window.innerHeight, 'descriptionOffset');
         
         animationRef.current = requestAnimationFrame(animate);
     };
@@ -313,21 +336,25 @@ const ProjectOne = () => {
             }))
         }
 
-        window.addEventListener("wheel", onScroll);
-        window.addEventListener("touchstart", onTouchStart);
-        window.addEventListener("touchmove", onTouchMove);
-        window.addEventListener("touchend", onTouchEnd);
+        if (animationComplete2) {
+            window.addEventListener("wheel", onScroll);
+            window.addEventListener("touchstart", onTouchStart);
+            window.addEventListener("touchmove", onTouchMove);
+            window.addEventListener("touchend", onTouchEnd);
+        }
 
         return () => {
-            window.removeEventListener("wheel", onScroll);
-            window.removeEventListener("touchstart", onTouchStart);
-            window.removeEventListener("touchmove", onTouchMove);
-            window.removeEventListener("touchend", onTouchEnd);
+            if (animationComplete2) {
+                window.removeEventListener("wheel", onScroll);
+                window.removeEventListener("touchstart", onTouchStart);
+                window.removeEventListener("touchmove", onTouchMove);
+                window.removeEventListener("touchend", onTouchEnd);
+            }
             if (scrollTimeoutRef.current) {
                 clearTimeout(scrollTimeoutRef.current);
             }
         }
-    }, []);
+    }, [animationComplete2]);
 
     useEffect(() => {
         const onResize = (e: any) => {
@@ -382,17 +409,17 @@ const ProjectOne = () => {
                             )
                         })}
                     </ul>
-                    <ul className={styles['minimap-info-list']} ref={descriptionListRef}>
+                    <ul className={styles['minimap-info-list']} ref={descriptionListRef} style={{ opacity: !animationComplete ? '0' : '100%' }}>
                         {projects.map((project) => {
                             return (
-                                <div key={`minimap-${project.title}-ind${project.index}`} className={styles['minimap-info-item']} data-project-index={project.index}>
-                                    <div className={`${styles['minimap-info-item-row']} ${styles.topRow}`}>
-                                        <p className={styles.topRow}>01</p>
-                                        <p className={styles.topRow}>{project.title}</p>
+                                <div key={`minimap-${project.title}-ind${project.index}`} className={`${styles['minimap-info-item']}`} data-project-index={project.index}>
+                                    <div className={`${styles['minimap-info-item-row']}`}>
+                                        <p>01</p>
+                                        <p>{project.title}</p>
                                     </div>
-                                    <div className={`${styles['minimap-info-item-row']} ${styles.botRow}`}>
-                                        <p className={styles.botRow}>{project.category}</p>
-                                        <p className={styles.botRow}>{project.year}</p>
+                                    <div className={`${styles['minimap-info-item-row']}`}>
+                                        <p>{project.category}</p>
+                                        <p>{project.year}</p>
                                     </div>
                                 </div>
                             )

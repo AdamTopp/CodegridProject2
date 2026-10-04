@@ -60,7 +60,6 @@
         position: relative;
         width: 100%;
         height: 100%;
-
     }
 
     &-img-preview {
@@ -68,15 +67,9 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        height: 0;
+        height: 0%;
         overflow: hidden;
         aspect-ratio: 16 / 10;
-
-        @media (max-width: 1000px) {
-            left: unset;
-            right: 0rem;
-            transform: translate(0, -50%);
-        }
     }
 
     &-img-item {
@@ -90,7 +83,7 @@
         & img {
             position: relative;
             will-change: transform;
-            transform: translateY(var(--currentY)) scale(2.5);
+            transform: translateY(var(--currentY)) scale(1.5);
         }
     }
 
@@ -110,6 +103,7 @@
         justify-content: space-between;
         will-change: transform;
         transform: translateY(var(--currentY));
+        overflow: hidden;
 
         &-row {
             width: 100%;
@@ -117,7 +111,6 @@
             justify-content: space-between;
             padding: 0.5rem;
             color: black;
-            transform: translateY(var(--currentY));
             font-family: "Oswald";
             overflow: hidden;
 
@@ -127,20 +120,8 @@
                 letter-spacing: -5%;
                 line-height: 1;
             }
-
-            @media (max-width: 1000px) {
-                flex-direction: column;
-            }
         }
     }
-}
-
-.topRow {
-    transform: translateY(-150%);
-}
-
-.botRow {
-    transform: translateY(150%);
 }
 
 .minimapBackground {

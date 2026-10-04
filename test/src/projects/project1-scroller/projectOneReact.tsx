@@ -59,10 +59,10 @@ const projectData: Data[] = [
 ];
 
 const config = {
-    SCROLL_SPEED: 5,
+    SCROLL_SPEED: 10,
     LERP_FACTOR: 0.05,
     BUFFER_SIZE: 4,
-    MAX_VELOCITY: 250,
+    MAX_VELOCITY: 350,
     SNAP_DURATION: 500,
 };
 
@@ -90,7 +90,7 @@ const ProjectOne = () => {
 
     const middleSectionGrow = () => {
         const tl = gsap.timeline()
-        tl.to(`.${styles.minimapBackground}`, { width: '40%', duration: 1, delay: 0.3, ease: 'power1.inOut' });
+        tl.to(`.${styles.minimapBackground}`, { width: '40%', duration: 0.8, delay: 0.3, ease: 'back.inOut' });
         return tl;
     }
 
@@ -102,15 +102,15 @@ const ProjectOne = () => {
 
     const minimapExpand = () => {
         const tl = gsap.timeline()
-        tl.to(`.${styles['minimap-img-preview']}`, { height: '100%', duration: 1.3, delay: 0, clearProps: 'transform', ease: 'back.inOut' })
-        .fromTo(`.${styles['minimap-img-item']} > img`, { transform: 'translateY(var(--currentY)) scale(3)' }, { transform: 'translateY(var(--currentY)) scale(1.5)', clearProps: 'transform', duration: 1.5, delay: 0, ease: 'back.inOut' }, "<")
+        tl.to(`.${styles['minimap-img-preview']}`, { height: '100%', duration: 1.1, delay: 0, clearProps: 'transform', ease: 'back.inOut' })
+        .fromTo(`.${styles['minimap-img-item']} > img`, { transform: 'translateY(var(--currentY)) scale(3)' }, { transform: 'translateY(var(--currentY)) scale(1.5)', clearProps: 'transform', duration: 1.3, delay: 0, ease: 'back.inOut' }, "<")
         
         return tl;
     }
 
     const textAppear = (c: string) => {
         const tl = gsap.timeline()
-        tl.to(`.${c} > div`, { transform: 'translateY(0)', duration: 0.5, ease: 'power3.inOut' });
+        tl.to(`.${c} > div`, { transform: 'translateY(0)', duration: 0.55, ease: 'power2.inOut' });
         return tl;
     }
 
@@ -140,8 +140,6 @@ const ProjectOne = () => {
     }
 
     useGSAP(() => {
-        // gsap code here...
-        // gsap.to(`.${styles['minimap-img-preview']}`, { x: 360 });
         const main = gsap.timeline({ onComplete: onCompleteBase });
         main
             .add(middleSectionGrow())
@@ -150,8 +148,6 @@ const ProjectOne = () => {
             .add(textAppear(styles.text2), "-=0.4")
             .add(textAppear(styles.text3), "-=0.4")
             .add(textAppear(styles.letterRight), "-=0.4")
-            // .add(minimapExpand(), "-=0.6")
-            // .add(rowsAppear())
         main.play();
         
     });
@@ -381,6 +377,7 @@ const ProjectOne = () => {
                     )
                 })}
             </ul>
+            <div className={styles.test}>
             <div className={styles.minimap}>
                 <div className={styles.minimapBackground}>
                     <div className={`${styles.letter} ${styles.letterLeft}`}>
@@ -426,6 +423,7 @@ const ProjectOne = () => {
                         })}
                     </ul>
                 </div>
+            </div>
             </div>
         </div>
     )

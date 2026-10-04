@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url("https://use.typekit.net/nfv7lgc.css");
 
 .wrapper {
     font-family: "Inter", sans-serif;
@@ -43,17 +44,25 @@
 
 }
 
-.minimap {
+.test {
     position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 75%;
+    width: 100%;
+    padding: 2.5rem;
+}
+
+.minimap {
+    position: relative;
+    width: 100%;
     max-width: 1230px;
     min-height: 200px;
-    height: 20svh; // ???
-    // background-color: white;
-    padding: 1.5rem;
+    height: 20svh;
+    padding: clamp(1rem,1vw,1.3rem);
     overflow: visible;
 
     &-wrapper {
@@ -109,14 +118,13 @@
             width: 100%;
             display: flex;
             justify-content: space-between;
-            padding: 0.5rem;
             color: black;
-            font-family: "Oswald";
+            font-family: "elza-text", sans-serif;
             overflow: hidden;
 
             & p {
-                font-size: 18px;
-                font-weight: 900;
+                font-size: 0.75rem;
+                font-weight: 1000;
                 letter-spacing: -5%;
                 line-height: 1;
             }
@@ -137,7 +145,7 @@
 
 .letter {
     position: absolute;
-    font-family: "Oswald";
+    font-family: "elza-text", sans-serif;;
     font-size: clamp(20px, 13vw, 160px);
     font-weight: 700;
     line-height: 1;
@@ -163,7 +171,7 @@
     position: absolute;
     font-size: clamp(12px, 2vw, 20px);
     text-transform: uppercase;
-    font-family: "Oswald";
+    font-family: "elza-text", sans-serif;;
     overflow: hidden;
 
     & > div {

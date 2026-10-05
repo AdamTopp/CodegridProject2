@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url("https://use.typekit.net/nfv7lgc.css");
+
+.wrapper {
+    font-family: "elza", sans-serif;
+    position: fixed;
+    width: 100%;
+    height: 100svh;
+    overflow: hidden;
+    touch-action: none;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: left center;
+    }
+
+    p {
+        text-transform: uppercase;
+        letter-spacing: -0.0125rem;
+    }
+}
+
+.project {
+    position: absolute;
+    width: 100%;
+    height: 100svh;
+    will-change: transform;
+    overflow: hidden;
+    transform: translateY(var(--currentY));
+
+    & img {
+        position: relative;
+        transform: scale(1.5);
+        will-change: transform;
+        transform: translateY(var(--currentY)) scale(1.5);
+    }
+}
+
+.project-list {
+
+}
+
+.backdrop {
+    position: fixed;
+    width: 100%;
+    height: 100svh;
+    background: rgba( 0, 0, 0, 1 );
+    backdrop-filter: blur(16px);
+}
+
+.minimapContainer {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    padding: 2.5rem;
+}
+
+.minimap {
+    position: relative;
+    width: 100%;
+    max-width: 1230px;
+    min-height: 200px;
+    height: 20svh;
+    padding: 1rem;
+    overflow: visible;
+
+    &-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    &-img-preview {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 0%;
+        overflow: hidden;
+        aspect-ratio: 16 / 10;
+    }
+
+    &-img-item {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        will-change: transform;
+        overflow: hidden;
+        transform: translateY(var(--currentY));
+
+        & img {
+            position: relative;
+            will-change: transform;
+            transform: translateY(var(--currentY)) scale(1.5);
+        }
+    }
+
+    &-info-list {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    &-info-item {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        will-change: transform;
+        transform: translateY(var(--currentY));
+        overflow: hidden;
+        opacity: var(--isVisible);
+        transition: opacity 0.2s;
+
+        &-row {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            color: black;
+            overflow: hidden;
+            padding: 0 2px;
+            font-family: "elza", sans-serif;
+            font-weight: 900;
+
+            &-data {
+                font-size: 0.75rem;
+                letter-spacing: -3%;
+            }
+
+            &-date {
+                color: rgb(192, 192, 192);
+                font-size: 0.75rem;
+                font-family: elza-text, sans-serif;
+                font-weight: 400;
+                letter-spacing: 3%;
+                font-style: italic;
+            }
+
+            &-title {
+                line-height: 1;
+                text-transform: uppercase;
+                font-size: 0.75rem;
+            }
+        }
+    }
+}
+
+.minimapBackground {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    // width: 0;
+    height: clamp(10px, 3vw, 36px);
+
+    &Content {
+        background: white;
+        width: 0%;
+        height: 100%;
+        
+    }
+}
+
+.letter {
+    position: absolute;
+    font-size: clamp(20px, 13vw, 160px);
+    font-family: "elza", sans-serif;
+    font-weight: 900;
+    line-height: 1;
+    overflow: hidden;
+    user-select: none;
+    & > div {
+        transform: translateY(100%);
+    }
+
+    &Left {
+        left: 0;
+        top: 50%;
+        transform: translate(calc(-100% - 2.5vw), -50%);
+    }
+
+    &Right {
+        right: 0;
+        top: 50%;
+        transform: translate(calc(100% + 2.5vw), -50%);
+    }
+}
+
+.text {
+    position: absolute;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-family: "elza", sans-serif;
+    font-weight: 900;
+    letter-spacing: -3%;
+    overflow: hidden;
+    user-select: none;
+
+    & > div {
+        transform: translateY(100%);
+    }
+
+    &1 {
+        left: 0;
+        top: 0;
+        transform: translateY(calc(-100% - 24px));
+    }
+
+    &2 {
+        left: 50%;
+        bottom: 0;
+        transform: translate(-50%, calc(100% + 24px));
+    }
+
+    &3 {
+        right: 0;
+        top: 0;
+        transform: translateY(calc(-100% - 24px));
+    }
+}

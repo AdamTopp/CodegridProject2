@@ -1,14 +1,15 @@
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './projectOne.module.scss';
 import { useGSAP } from '@gsap/react';
 import { gsap } from "gsap";
 
 interface Data {
-    title: string;
+    city: string;
     image: string;
-    category: string;
-    year: string;
+    title: string;
+    museum: string;
+    years: string[];
 }
 
 interface ParalaxInfo {
@@ -21,6 +22,7 @@ interface ParalaxInfo {
 export interface Project extends Data {
     index: number;
     lerp: number;
+    projectIndex: number;
 }
 
 export interface ScrollInfo {
@@ -33,28 +35,32 @@ export interface ScrollInfo {
 
 const projectData: Data[] = [
     {
-        title: "Test 1",
+        city: "Paris",
         image: "img1.jpg",
-        category: "Category 1",
-        year: "2021"
+        title: "Water Lillies",
+        museum: "National Gallery",
+        years: ['1891', '1893']
     },
     {
-        title: "Test 2",
+        city: "Tokyo",
         image: "img2.jpg",
-        category: "Category 2",
-        year: "2022"
+        title: "Water Lillies",
+        museum: "National Gallery",
+        years: ['1893']
     },
     {
-        title: "Test 3",
+        city: "New York",
         image: "img3.jpg",
-        category: "Category 3",
-        year: "2023"
+        title: "Water Lillies",
+        museum: "2023",
+        years: ['1895', '1896']
     },
     {
-        title: "Test 4",
+        city: "Paris",
         image: "img4.jpg",
-        category: "Category 4",
-        year: "2024"
+        title: "Category 4",
+        museum: "2024",
+        years: ['1896', '1898']
     }
 ];
 
@@ -108,26 +114,42 @@ const ProjectOne = () => {
         return tl;
     }
 
-    const textAppear = (c: string) => {
+    const textAppear = () => {
         const tl = gsap.timeline()
-        tl.to(`.${c} > div`, { transform: 'translateY(0)', duration: 0.55, ease: 'power2.inOut' });
+        tl.to(`.${styles.letterLeft} > div`, { transform: 'translateY(0)', duration: 0.35, ease: 'power2.out' })
+        .to(`.${styles.text1} > div`, { transform: 'translateY(0)', duration: 0.35, ease: 'power2.out' }, "-=0.2")
+        .to(`.${styles.text2} > div`, { transform: 'translateY(0)', duration: 0.35, ease: 'power2.out' }, "-=0.2")
+        .to(`.${styles.text3} > div`, { transform: 'translateY(0)', duration: 0.35, ease: 'power2.out' }, "-=0.2")
+        .to(`.${styles.letterRight} > div`, { transform: 'translateY(0)', duration: 0.35, ease: 'power2.out' }, "-=0.2")
+        return tl;
+    }
+
+    const backdropOpacity = () => {
+        const tl = gsap.timeline()
+        tl.to(`.${styles['backdrop']}`, { background: 'rgba( 0, 0, 0, 0.6 )', duration: 1.5, ease: 'power3.inOut'});
+        return tl;
+    }
+
+    const backdropHide = () => {
+        const tl = gsap.timeline()
+        tl.to(`.${styles['backdrop']}`, { background: 'rgba( 0, 0, 0, 0.0 )', filter: 'none', duration: 1.5, ease: 'power3.inOut'});
         return tl;
     }
 
     const rowsAppear = () => {
         const tl = gsap.timeline()
-        tl.fromTo(`.${styles['minimap-info-item-row']}:nth-child(1) p`, { transform: 'translateY(-150%)', opacity: '0' }, { transform: 'translateY(0)', opacity: '100%', duration: 1.2, ease: 'power3.inOut', clearProps: 'transform' })
-        .fromTo(`.${styles['minimap-info-item-row']}:nth-child(2) p`, { transform: 'translateY(150%)', opacity: '0' }, { transform: 'translateY(0)', opacity: '100%', duration: 1.2, ease: 'power3.inOut', clearProps: 'transform' }, "<");
+        tl.fromTo(`.test .${styles['minimap-info-item-row']}:nth-child(1) .${styles['minimap-info-item-row-data']}`, { transform: 'translateY(-150%)', opacity: '0' }, { transform: 'translateY(0)', opacity: '100%', duration: 1.2, ease: 'power3.inOut', clearProps: 'transform' })
+        .fromTo(`.test .${styles['minimap-info-item-row']}:nth-child(2) .${styles['minimap-info-item-row-data']}`, { transform: 'translateY(150%)', opacity: '0' }, { transform: 'translateY(0)', opacity: '100%', duration: 1.2, ease: 'power3.inOut', clearProps: 'transform' }, "<");
         return tl;
     }
 
     const textHide = () => {
         const tl = gsap.timeline()
-        tl.to(`.${styles.letterRight} > div`, { transform: 'translateY(100%)', duration: 0.3, delay: 0.8, ease: 'power1.inOut' })
-        .to(`.${styles.text3} > div`, { transform: 'translateY(100%)', duration: 0.3, ease: 'power1.inOut' }, "-=0.2")
-        .to(`.${styles.text2} > div`, { transform: 'translateY(100%)', duration: 0.3, ease: 'power1.inOut' }, "-=0.2")
-        .to(`.${styles.text1} > div`, { transform: 'translateY(100%)', duration: 0.3, ease: 'power1.inOut' }, "-=0.2")
-        .to(`.${styles.letterLeft} > div`, { transform: 'translateY(100%)', duration: 0.3, ease: 'power1.inOut' }, "-=0.2");
+        tl.to(`.${styles.letterRight} > div`, { transform: 'translateY(100%)', duration: 0.2, delay: 0.8, ease: 'power1.inOut' })
+        .to(`.${styles.text3} > div`, { transform: 'translateY(100%)', duration: 0.2, ease: 'power1.inOut' }, "-=0.17")
+        .to(`.${styles.text2} > div`, { transform: 'translateY(100%)', duration: 0.2, ease: 'power1.inOut' }, "-=0.17")
+        .to(`.${styles.text1} > div`, { transform: 'translateY(100%)', duration: 0.2, ease: 'power1.inOut' }, "-=0.17")
+        .to(`.${styles.letterLeft} > div`, { transform: 'translateY(100%)', duration: 0.2, ease: 'power1.inOut' }, "-=0.17");
         return tl;
     }
 
@@ -143,11 +165,8 @@ const ProjectOne = () => {
         const main = gsap.timeline({ onComplete: onCompleteBase });
         main
             .add(middleSectionGrow())
-            .add(textAppear(styles.letterLeft), "-=0.2")
-            .add(textAppear(styles.text1), "-=0.2")
-            .add(textAppear(styles.text2), "-=0.4")
-            .add(textAppear(styles.text3), "-=0.4")
-            .add(textAppear(styles.letterRight), "-=0.4")
+            .add(backdropOpacity(), "<")
+            .add(textAppear(), "-=0.2")
         main.play();
         
     });
@@ -157,7 +176,8 @@ const ProjectOne = () => {
             const main = gsap.timeline({ onComplete: onCompleteContent });
             main
                 .add(textHide())
-                .add(middleSectionExand())
+                .add(backdropHide(), "-=0.3")
+                .add(middleSectionExand(), "<")
                 .add(minimapExpand(), "-=1")
                 .add(rowsAppear(), "-=1")
             main.play();
@@ -183,10 +203,12 @@ const ProjectOne = () => {
                 const indx = getProjectIndex(i);
                 const data = projectData[indx];
                 temp.push({
-                    title: data.title,
+                    city: data.city,
                     image: data.image,
-                    category: data.category,
-                    year: data.year,
+                    title: data.title,
+                    museum: data.museum,
+                    years: data.years,
+                    projectIndex: indx,
                     index: i,
                     lerp: 0,
                 })
@@ -200,11 +222,10 @@ const ProjectOne = () => {
         return temp;
     };
 
-    const updateElements = (wrapper: HTMLUListElement | null, height: number, elementY: number, paralaxKey: keyof ParalaxInfo) => {
+    const updateElements = (wrapper: HTMLUListElement | null, height: number, elementY: number, paralaxKey: keyof ParalaxInfo, currentY?: number) => {
         if (wrapper) {
             for (let el of wrapper.children) {
                 const htmlEl = el as HTMLElement;
-                const imgEl = htmlEl.children[0] as HTMLElement;
                 const ind = Number(
                     htmlEl.dataset.projectIndex
                 );
@@ -216,16 +237,20 @@ const ProjectOne = () => {
                     imgCurrentY = lerp(paralaxCurrent[paralaxKey], imgTargetY, 0.08);
                     paralaxMapRef.current.set(ind, { ...paralaxCurrent, [paralaxKey]: imgCurrentY });
                 }
-                
-                htmlEl.style.setProperty('--currentY', `${divTargetY.toString()}px`);
+                console.log(currentY);
+                if (currentY !== undefined) {
+                    const isCurrentIndex = Math.abs((-1 * Math.round(currentY) / window.innerHeight) - ind) < 0.5;
+                    htmlEl.style.setProperty('--isVisible', isCurrentIndex ? '1' : '0');
+                }
+                htmlEl.style.setProperty('--currentY', `${divTargetY.toFixed(3)}px`);
                 if (paralaxKey !== 'descriptionOffset') {
-                if (Math.abs(imgCurrentY - imgTargetY) > 0.01) {
-                    for (let ch of htmlEl.children) {
-                        const childElement = ch as HTMLElement;
-                        childElement.style.setProperty('--currentY', `${imgCurrentY.toString()}px`);
+                    if (Math.abs(imgCurrentY - imgTargetY) > 0.01) {
+                        for (let ch of htmlEl.children) {
+                            const childElement = ch as HTMLElement;
+                            childElement.style.setProperty('--currentY', `${imgCurrentY.toFixed(3)}px`);
+                        }
                     }
                 }
-            }
             } 
         }
     }
@@ -240,9 +265,10 @@ const ProjectOne = () => {
         const descriptionWrapper = descriptionListRef?.current;
         const mH = minimapWrapper?.clientHeight ? minimapWrapper.clientHeight : 250;
         const dH = descriptionWrapper?.clientHeight ? descriptionWrapper.clientHeight : 250;
+
         updateElements(projectWrapper, window.innerHeight, cY, "imgOffset");
         updateElements(minimapWrapper, mH, cY * mH / window.innerHeight, 'miniImgOffset');
-        updateElements(descriptionWrapper, dH, cY * dH / window.innerHeight, 'descriptionOffset');
+        updateElements(descriptionWrapper, dH, cY * dH / window.innerHeight, 'descriptionOffset', cY);
         
         animationRef.current = requestAnimationFrame(animate);
     };
@@ -371,59 +397,67 @@ const ProjectOne = () => {
                 {projects.map((project) => {
                     
                     return (
-                        <div key={`${project.title}-ind${project.index}`} className={styles.project} data-project-index={project.index}>
-                            <img src={project.image} alt={project.title}></img>
+                        <div key={`${project.city}-ind${project.index}`} className={styles.project} data-project-index={project.index}>
+                            <img src={project.image} alt={project.city}></img>
                         </div>
                     )
                 })}
             </ul>
-            <div className={styles.test}>
-            <div className={styles.minimap}>
-                <div className={styles.minimapBackground}>
-                    <div className={`${styles.letter} ${styles.letterLeft}`}>
-                        <div>C</div>
+            <div className={styles.backdrop} />
+            <div className={styles.minimapContainer}>
+                <div className={styles.minimap}>
+                    <div className={styles.minimapBackground}>
+                        <div className={`${styles.letter} ${styles.letterLeft}`}>
+                            <div>C</div>
+                        </div>
+                        <div className={`${styles.letter} ${styles.letterRight}`}>
+                            <div>M</div>
+                        </div>
+                        <div className={`${styles.text} ${styles.text1}`}>
+                            <div>Claude</div>
+                        </div>
+                        <div className={`${styles.text} ${styles.text2}`}>
+                            <div>Lillies</div>
+                        </div>
+                        <div className={`${styles.text} ${styles.text3}`}>
+                            <div>Monet</div>
+                        </div>
                     </div>
-                    <div className={`${styles.letter} ${styles.letterRight}`}>
-                        <div>M</div>
-                    </div>
-                    <div className={`${styles.text} ${styles.text1}`}>
-                        <div>Claude</div>
-                    </div>
-                    <div className={`${styles.text} ${styles.text2}`}>
-                        <div>Lillies</div>
-                    </div>
-                    <div className={`${styles.text} ${styles.text3}`}>
-                        <div>Monet</div>
+                    <div className={styles['minimap-wrapper']}>
+                        <ul className={styles['minimap-info-list']} ref={descriptionListRef} style={{ opacity: !animationComplete ? '0' : '100%' }}>
+                            {projects.map((project, ind) => {
+                                return (
+                                    <div key={`minimap-${project.city}-ind${project.index}`} className={`${styles['minimap-info-item']} ${project.index === 0 ? 'test' : ''}`} data-project-index={project.index}>
+                                        <div className={`${styles['minimap-info-item-row']}`}>
+                                            <p className={`${styles['minimap-info-item-row-data']}`}>{(project.projectIndex + 1).toString().padStart(2, '0')}</p>
+                                            <p className={`${styles['minimap-info-item-row-data']}`}>{project.city}</p>
+                                        </div>
+                                        <div className={`${styles['minimap-info-item-row']}`}>
+                                            <div className={`${styles['minimap-info-item-row-data']}`}>
+                                                <div className={`${styles['minimap-info-item-row-date']}`}>
+                                                    ({project.years.join(' – ')})
+                                                </div>
+                                                <div className={`${styles['minimap-info-item-row-title']}`}>
+                                                    {project.title}
+                                                </div>
+                                            </div>
+                                            <p className={`${styles['minimap-info-item-row-data']}`}>{project.museum}</p>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </ul>
+                        <ul className={styles['minimap-img-preview']} ref={minimapListRef}>
+                            {projects.map((project) => {
+                                return (
+                                    <div key={`minimap-${project.city}-ind${project.index}`} className={styles['minimap-img-item']} data-project-index={project.index}>
+                                        <img src={project.image} alt={project.city}></img>
+                                    </div>
+                                )
+                            })}
+                        </ul>
                     </div>
                 </div>
-                <div className={styles['minimap-wrapper']}>
-                    <ul className={styles['minimap-img-preview']} ref={minimapListRef}>
-                        {projects.map((project) => {
-                            return (
-                                <div key={`minimap-${project.title}-ind${project.index}`} className={styles['minimap-img-item']} data-project-index={project.index}>
-                                    <img src={project.image} alt={project.title}></img>
-                                </div>
-                            )
-                        })}
-                    </ul>
-                    <ul className={styles['minimap-info-list']} ref={descriptionListRef} style={{ opacity: !animationComplete ? '0' : '100%' }}>
-                        {projects.map((project) => {
-                            return (
-                                <div key={`minimap-${project.title}-ind${project.index}`} className={`${styles['minimap-info-item']}`} data-project-index={project.index}>
-                                    <div className={`${styles['minimap-info-item-row']}`}>
-                                        <p>01</p>
-                                        <p>{project.title}</p>
-                                    </div>
-                                    <div className={`${styles['minimap-info-item-row']}`}>
-                                        <p>{project.category}</p>
-                                        <p>{project.year}</p>
-                                    </div>
-                                </div>
-                            )
-                        })}
-                    </ul>
-                </div>
-            </div>
             </div>
         </div>
     )

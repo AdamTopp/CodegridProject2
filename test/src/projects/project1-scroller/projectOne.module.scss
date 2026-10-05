@@ -3,7 +3,7 @@
 @import url("https://use.typekit.net/nfv7lgc.css");
 
 .wrapper {
-    font-family: "Inter", sans-serif;
+    font-family: "elza", sans-serif;
     position: fixed;
     width: 100%;
     height: 100svh;
@@ -18,8 +18,6 @@
 
     p {
         text-transform: uppercase;
-        font-size: 0.85rem;
-        font-weight: 600;
         letter-spacing: -0.0125rem;
     }
 }
@@ -44,7 +42,15 @@
 
 }
 
-.test {
+.backdrop {
+    position: fixed;
+    width: 100%;
+    height: 100svh;
+    background: rgba( 0, 0, 0, 1 );
+    backdrop-filter: blur(16px);
+}
+
+.minimapContainer {
     position: fixed;
     display: flex;
     justify-content: center;
@@ -62,7 +68,7 @@
     max-width: 1230px;
     min-height: 200px;
     height: 20svh;
-    padding: clamp(1rem,1vw,1.3rem);
+    padding: 1rem;
     overflow: visible;
 
     &-wrapper {
@@ -113,20 +119,39 @@
         will-change: transform;
         transform: translateY(var(--currentY));
         overflow: hidden;
+        opacity: var(--isVisible);
+        transition: opacity 0.2s;
 
         &-row {
             width: 100%;
             display: flex;
             justify-content: space-between;
+            align-items: flex-end;
             color: black;
-            font-family: "elza-text", sans-serif;
             overflow: hidden;
+            padding: 0 2px;
+            font-family: "elza", sans-serif;
 
-            & p {
+            &-data {
                 font-size: 0.75rem;
-                font-weight: 1000;
-                letter-spacing: -5%;
+                // font-weight: 500;
+                letter-spacing: -3%;
+            }
+
+            &-date {
+                color: rgb(192, 192, 192);
+                font-size: 0.75rem;
+                font-family: elza-text, sans-serif;
+                font-weight: 400;
+                letter-spacing: 3%;
+                font-style: italic;
+            }
+
+            &-title {
                 line-height: 1;
+                text-transform: uppercase;
+                font-size: 0.75rem;
+                // font-weight: 500;
             }
         }
     }
@@ -145,9 +170,9 @@
 
 .letter {
     position: absolute;
-    font-family: "elza-text", sans-serif;;
     font-size: clamp(20px, 13vw, 160px);
-    font-weight: 700;
+    font-family: "elza", sans-serif;
+    font-weight: 900;
     line-height: 1;
     overflow: hidden;
     & > div {
@@ -169,9 +194,10 @@
 
 .text {
     position: absolute;
-    font-size: clamp(12px, 2vw, 20px);
+    font-size: clamp(0.6rem, 1vw, 1rem);
     text-transform: uppercase;
-    font-family: "elza-text", sans-serif;;
+    font-family: "elza", sans-serif;
+    font-weight: 900;
     overflow: hidden;
 
     & > div {

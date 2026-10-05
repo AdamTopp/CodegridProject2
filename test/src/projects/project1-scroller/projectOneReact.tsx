@@ -116,11 +116,11 @@ const ProjectOne = () => {
 
     const textAppear = () => {
         const tl = gsap.timeline()
-        tl.to(`.${styles.letterLeft} > div`, { transform: 'translateY(0)', duration: 0.35, ease: 'power2.out' })
-        .to(`.${styles.text1} > div`, { transform: 'translateY(0)', duration: 0.35, ease: 'power2.out' }, "-=0.2")
-        .to(`.${styles.text2} > div`, { transform: 'translateY(0)', duration: 0.35, ease: 'power2.out' }, "-=0.2")
-        .to(`.${styles.text3} > div`, { transform: 'translateY(0)', duration: 0.35, ease: 'power2.out' }, "-=0.2")
-        .to(`.${styles.letterRight} > div`, { transform: 'translateY(0)', duration: 0.35, ease: 'power2.out' }, "-=0.2")
+        tl.to(`.${styles.letterLeft} > div`, { transform: 'translateY(0)', duration: 0.375, ease: 'power2.out' })
+        .to(`.${styles.text1} > div`, { transform: 'translateY(0)', duration: 0.375, ease: 'power2.out' }, "-=0.275")
+        .to(`.${styles.text2} > div`, { transform: 'translateY(0)', duration: 0.375, ease: 'power2.out' }, "-=0.275")
+        .to(`.${styles.text3} > div`, { transform: 'translateY(0)', duration: 0.375, ease: 'power2.out' }, "-=0.275")
+        .to(`.${styles.letterRight} > div`, { transform: 'translateY(0)', duration: 0.375, ease: 'power2.out' }, "-=0.275")
         return tl;
     }
 

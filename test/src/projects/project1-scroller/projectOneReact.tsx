@@ -35,32 +35,32 @@ export interface ScrollInfo {
 
 const projectData: Data[] = [
     {
-        city: "Paris",
-        image: "img1.jpg",
-        title: "Water Lillies",
-        museum: "National Gallery",
-        years: ['1891', '1893']
-    },
-    {
-        city: "Tokyo",
-        image: "img2.jpg",
-        title: "Water Lillies",
-        museum: "National Gallery",
-        years: ['1893']
-    },
-    {
         city: "New York",
+        image: "img1.jpg",
+        title: "La Grenouillère",
+        museum: "Metropolitan Museum of Art",
+        years: ['1869']
+    },
+    {
+        city: "United States",
+        image: "img2_1.jpg",
+        title: "Japanese Bridge and Water Lily Pond",
+        museum: "Philadelphia Museum of Art",
+        years: ['1899']
+    },
+    {
+        city: "Paris",
         image: "img3.jpg",
-        title: "Water Lillies",
-        museum: "2023",
-        years: ['1895', '1896']
+        title: "Clear Morning with Willows",
+        museum: "Musée de l'Orangerie",
+        years: ['1914', '1926']
     },
     {
         city: "Paris",
         image: "img4.jpg",
-        title: "Category 4",
-        museum: "2024",
-        years: ['1896', '1898']
+        title: "Water Lilies – Evening Effect",
+        museum: "Musée Marmottan Monet",
+        years: ['1897', '1898']
     }
 ];
 
@@ -96,13 +96,13 @@ const ProjectOne = () => {
 
     const middleSectionGrow = () => {
         const tl = gsap.timeline()
-        tl.to(`.${styles.minimapBackground}`, { width: '40%', duration: 0.8, delay: 0.3, ease: 'back.inOut' });
+        tl.to(`.${styles.minimapBackground} .${styles.minimapBackgroundContent}`, { width: '100%', duration: 1.2, delay: 0.3, ease: 'power2.inOut' });
         return tl;
     }
 
     const middleSectionExand = () => {
         const tl = gsap.timeline()
-        tl.to(`.${styles.minimapBackground}`, { width: '100%', height: '100%', duration: 1, delay: 0, ease: 'expo.inOut' });
+        tl.to(`.${styles.minimapBackground}`, { width: '100%', height: '100%', duration: 1, delay: 0, ease: 'power2.inOut' });
         return tl;
     }
 
@@ -115,12 +115,15 @@ const ProjectOne = () => {
     }
 
     const textAppear = () => {
+        const duration = 0.375;
+        const timing = "-=0.25";
+        const ease = 'power2.inOut';
         const tl = gsap.timeline()
-        tl.to(`.${styles.letterLeft} > div`, { transform: 'translateY(0)', duration: 0.375, ease: 'power2.out' })
-        .to(`.${styles.text1} > div`, { transform: 'translateY(0)', duration: 0.375, ease: 'power2.out' }, "-=0.275")
-        .to(`.${styles.text2} > div`, { transform: 'translateY(0)', duration: 0.375, ease: 'power2.out' }, "-=0.275")
-        .to(`.${styles.text3} > div`, { transform: 'translateY(0)', duration: 0.375, ease: 'power2.out' }, "-=0.275")
-        .to(`.${styles.letterRight} > div`, { transform: 'translateY(0)', duration: 0.375, ease: 'power2.out' }, "-=0.275")
+        tl.to(`.${styles.letterLeft} > div`, { transform: 'translateY(0)', duration, ease, delay: 0.6})
+        .to(`.${styles.text1} > div`, { transform: 'translateY(0)', duration, ease }, timing)
+        .to(`.${styles.text2} > div`, { transform: 'translateY(0)', duration, ease }, timing)
+        .to(`.${styles.text3} > div`, { transform: 'translateY(0)', duration, ease }, timing)
+        .to(`.${styles.letterRight} > div`, { transform: 'translateY(0)', duration, ease }, timing)
         return tl;
     }
 
@@ -166,7 +169,7 @@ const ProjectOne = () => {
         main
             .add(middleSectionGrow())
             .add(backdropOpacity(), "<")
-            .add(textAppear(), "-=0.2")
+            .add(textAppear(), "<")
         main.play();
         
     });
@@ -237,7 +240,6 @@ const ProjectOne = () => {
                     imgCurrentY = lerp(paralaxCurrent[paralaxKey], imgTargetY, 0.08);
                     paralaxMapRef.current.set(ind, { ...paralaxCurrent, [paralaxKey]: imgCurrentY });
                 }
-                console.log(currentY);
                 if (currentY !== undefined) {
                     const isCurrentIndex = Math.abs((-1 * Math.round(currentY) / window.innerHeight) - ind) < 0.5;
                     htmlEl.style.setProperty('--isVisible', isCurrentIndex ? '1' : '0');
@@ -407,21 +409,26 @@ const ProjectOne = () => {
             <div className={styles.minimapContainer}>
                 <div className={styles.minimap}>
                     <div className={styles.minimapBackground}>
-                        <div className={`${styles.letter} ${styles.letterLeft}`}>
-                            <div>C</div>
-                        </div>
-                        <div className={`${styles.letter} ${styles.letterRight}`}>
-                            <div>M</div>
-                        </div>
-                        <div className={`${styles.text} ${styles.text1}`}>
-                            <div>Claude</div>
-                        </div>
-                        <div className={`${styles.text} ${styles.text2}`}>
-                            <div>Lillies</div>
-                        </div>
-                        <div className={`${styles.text} ${styles.text3}`}>
-                            <div>Monet</div>
-                        </div>
+                        <div className={`${styles.minimapBackgroundContent}`}/>
+                        {!animationComplete2 && (
+                            <>
+                                <div className={`${styles.letter} ${styles.letterLeft}`}>
+                                    <div>C</div>
+                                </div>
+                                <div className={`${styles.letter} ${styles.letterRight}`}>
+                                    <div>M</div>
+                                </div>
+                                <div className={`${styles.text} ${styles.text1}`}>
+                                    <div>Claude</div>
+                                </div>
+                                <div className={`${styles.text} ${styles.text2}`}>
+                                    <div>Lillies</div>
+                                </div>
+                                <div className={`${styles.text} ${styles.text3}`}>
+                                    <div>Monet</div>
+                                </div>
+                            </>
+                        )}
                     </div>
                     <div className={styles['minimap-wrapper']}>
                         <ul className={styles['minimap-info-list']} ref={descriptionListRef} style={{ opacity: !animationComplete ? '0' : '100%' }}>

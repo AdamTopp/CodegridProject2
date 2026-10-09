@@ -353,7 +353,7 @@ const ProjectOne = () => {
             snapTimeout();
         }
 
-        const onTouchEnd = (e: TouchEvent) => {
+        const onTouchEnd = () => {
             setScrollInfo((p) => ({
                 ...p,
                 lastTouchY: 0,
@@ -381,7 +381,7 @@ const ProjectOne = () => {
     }, [animationComplete2]);
 
     useEffect(() => {
-        const onResize = (e: any) => {
+        const onResize = () => {
             snapTimeout();
             createContainers(scrollInfo.targetY);
         }
@@ -432,7 +432,7 @@ const ProjectOne = () => {
                     </div>
                     <div className={styles['minimap-wrapper']}>
                         <ul className={styles['minimap-info-list']} ref={descriptionListRef} style={{ opacity: !animationComplete ? '0' : '100%' }}>
-                            {projects.map((project, ind) => {
+                            {projects.map((project) => {
                                 return (
                                     <div key={`minimap-${project.city}-ind${project.index}`} className={`${styles['minimap-info-item']} ${project.index === 0 ? 'test' : ''}`} data-project-index={project.index}>
                                         <div className={`${styles['minimap-info-item-row']}`}>

@@ -34,6 +34,7 @@ jobs:
         with:
           node-version: lts/*
           cache: 'npm'
+          cache-dependency-path: test/yarn.lock
       - name: Install yarn
         run: corepack enable
       - name: Install dependencies

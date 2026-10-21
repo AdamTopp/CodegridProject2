@@ -1,0 +1,142 @@
+@use '../../variables.module.scss' as *;
+@import url("https://use.typekit.net/fpb1feq.css");
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+.nav {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    width: 100%;
+    max-width: calc($spacing * 160);
+    padding: 0.5rem;
+    border-radius: 1.75rem;
+
+    position: fixed;
+    top: calc($spacing * 6);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba($bgColor, 0.5);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+
+    interpolate-size: allow-keywords;
+}
+
+.navHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.navButton {
+    height: 42px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.75rem;
+    border: transparent;
+    background: none;
+    text-transform: uppercase;
+    padding-left: calc($spacing * 3);
+    font-family: "Work Sans", sans-serif;
+    color: $creme;
+    font-size: .875rem;
+    cursor: pointer;
+}
+
+.lines {
+    position: relative;
+    width: calc($spacing * 10);
+    height: calc($spacing * 2)
+}
+
+.line {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background: $border;
+    transition: all 300ms ease-in-out;
+    left: 0;
+}
+
+.lineTop {
+    top: 0;
+}
+
+.lineBottom {
+    top: 100%;
+}
+
+.rotateTop {
+    top: 50%;
+    transform: rotate(20deg);
+}
+
+.rotateBottom {
+    top: 50%;
+    transform: rotate(-20deg);
+}
+
+.navContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    font-family: "norman-variable", sans-serif;
+    font-variation-settings: 'wght' 400;
+    width: 100%;
+    interpolate-size: allow-keywords;
+    transition: height 1s cubic-bezier(0.21, 0.99, 0.67, 1);
+    height: fit-content;
+
+    &Closed {
+        interpolate-size: allow-keywords;
+        height: 0;
+    }
+
+    & li {
+        transition: opacity 0.5s, filter 0.5s;
+        list-style-type: none;
+        opacity: 0;
+        filter: blur(4px);
+    }
+
+    & li:not(:last-of-type) {
+        padding-bottom: calc($spacing * 6);
+    }
+
+    & li button {
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    & h2 {
+        font-size: 2.5rem;
+        font-variation-settings: 'wght' 500;
+        color: red;
+        margin: calc($spacing * 6) 0;
+    }
+
+    & ul {
+        padding-bottom: calc($spacing * 6);
+    }
+
+    & button {
+        font-family: "norman-variable", sans-serif;
+        font-variation-settings: 'wght' 400;
+        font-size: 2rem;
+        color: white;
+    }
+}
+
+.show {
+    color: purple;
+    opacity: 1 !important;
+    filter: none !important;
+}
+
+.spacer {
+    height: calc($spacing * 16);
+}

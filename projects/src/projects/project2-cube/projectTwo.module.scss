@@ -14,7 +14,8 @@ $main100: rgb(69, 92, 255);
 }
 
 .details {
-    background-color: $main100;
+    background-image: url('./Project2/bg.png');
+    background-size: cover;
     height: 100%;
     width: 100%;
     overflow: hidden;
@@ -66,7 +67,7 @@ $main100: rgb(69, 92, 255);
 
         & img {
             flex: 1;
-            width: 65vh;
+            // width: 65vh;
             background-color: lightblue;
         }
     }

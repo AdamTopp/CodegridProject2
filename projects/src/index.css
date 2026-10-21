@@ -8,3 +8,8 @@ body {
   background-color: rgb(18, 18, 19);
   color: white;
 }
+
+button {
+  border-color: transparent;
+  background-color: transparent;
+}

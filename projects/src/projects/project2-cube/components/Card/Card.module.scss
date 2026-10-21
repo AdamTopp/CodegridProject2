@@ -1,0 +1,74 @@
+$main100: rgb(69, 92, 255);
+
+.card {
+    --card-width: 65vh;
+    --card-height: 400px;
+    --card-depth: 150px;
+
+    flex: 1;
+    width: 65vh;
+    perspective: 4000px;
+}
+
+.cube {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    transform: translateZ(calc(var(--card-depth) / -2));
+}
+
+.face {
+    position: absolute;
+    backface-visibility: hidden;
+
+    &Front, &Back {
+        width: var(--card-width);
+        height: var(--card-height);
+        background: white;
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+
+    &Right, &Left {
+        width: var(--card-depth);
+        height: var(--card-height);
+        left: calc((var(--card-width) - var(--card-depth)) / 2);
+    }
+
+    &Top, &Bottom {
+        width: var(--card-width);
+        height: var(--card-depth);
+        top: calc((var(--card-height) - var(--card-depth)) / 2);
+    }
+
+    &Front {
+        transform: translateZ(calc(var(--card-depth) / 2));
+    }
+
+    &Back {
+        transform: rotateX(180deg) translateZ(calc(var(--card-depth) / 2));
+    }
+
+    &Right {
+        background: $main100;
+        transform: rotateY(90deg) translateZ(calc(var(--card-width) / 2));
+    }
+
+    &Left {
+        background: $main100;
+        transform: rotateY(-90deg) translateZ(calc(var(--card-width) / 2));
+    }
+
+    &Top {
+        background: $main100;
+        transform: rotateX(90deg) translateZ(calc(var(--card-height) / 2));
+    }
+
+    &Bottom {
+        background: $main100;
+        transform: rotateX(-90deg) translateZ(calc(var(--card-height) / 2));
+    }
+}

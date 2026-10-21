@@ -1,0 +1,48 @@
+@use '../../variables.module.scss' as *;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: calc($spacing * 4);
+    padding-block: calc($spacing * 5);
+    padding-inline: calc($spacing * 5);
+    height: calc($spacing * 10);
+    border-radius: calc($spacing * 6);
+
+    font-family: "Work Sans", sans-serif;
+    text-transform: uppercase;
+    color: $creme;
+    font-size: .875rem;
+
+    border: 1px $border solid;
+    cursor: pointer;
+
+    &Content {
+        position: relative;
+        overflow: hidden;
+
+        &Item1 {
+            line-height: 2;
+            transition: all 500ms;
+        }
+
+        &Item2 {
+            line-height: 2;
+            transition: all 500ms;
+            position: absolute;
+            top: 100%;
+        }
+    }
+
+    &:hover {
+        background-color: rgba($border, 0.25);
+    }
+
+    &:hover &ContentItem1, &:hover &ContentItem2 {
+        transform: translateY(-100%)
+    }
+}
+
+

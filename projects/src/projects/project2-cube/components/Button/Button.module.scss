@@ -6,17 +6,11 @@
     justify-content: center;
     align-items: center;
     gap: calc($spacing * 4);
-    padding-block: calc($spacing * 5);
-    padding-inline: calc($spacing * 5);
-    height: calc($spacing * 10);
-    border-radius: calc($spacing * 6);
 
     font-family: "Work Sans", sans-serif;
-    text-transform: uppercase;
     color: $creme;
     font-size: .875rem;
 
-    border: 1px $border solid;
     cursor: pointer;
 
     &Content {
@@ -33,16 +27,34 @@
             transition: all 500ms;
             position: absolute;
             top: 100%;
+            opacity: 0;
         }
     }
+
+    &:hover &ContentItem1, &:hover &ContentItem2 {
+        transform: translateY(-100%);
+    }
+
+    &:hover &ContentItem2 {
+        opacity: 1;
+    }
+
+    &:hover &ContentItem1 {
+        opacity: 0;
+    }
+}
+
+.outline {
+    padding-block: calc($spacing * 5);
+    padding-inline: calc($spacing * 5);
+    height: calc($spacing * 10);
+    border-radius: calc($spacing * 6);
+    border: 1px $border solid;
+    text-transform: uppercase;
 
     &:hover {
         background-color: rgba($border, 0.25);
     }
 
-    &:hover &ContentItem1, &:hover &ContentItem2 {
-        transform: translateY(-100%)
-    }
 }
-
 

@@ -89,12 +89,12 @@ const Header = () => {
                 <div>
                     <img src={Icon} style={{ height: '32px' }}/>
                 </div>
-                <Button label='Inquire' />
+                <Button label='Inquire' outline />
             </div>
             <ul ref={menuListRef} className={`${styles.navContent} ${!isOpen ? styles.navContentClosed : ''}`}>
                 {visibleItems.map(el => (
                     <li key={el.id} id={el.id} className={el.isVisible ? styles.show : ''}>
-                        {el.isHeader ? (<h2><button>{el.label}</button></h2>) : (<button>{el.label}</button>)}
+                        {el.isHeader ? (<h2><button>{el.label}</button></h2>) : (<Button label={el.label} customClassItem1={styles.buttonItem1} customClassItem2={`${styles.buttonHover} ${styles.buttonItem2}`}/>)}
                     </li>
                 ))}
                 <span className={styles.spacer}></span>

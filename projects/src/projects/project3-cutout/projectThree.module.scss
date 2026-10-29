@@ -33,7 +33,29 @@
         width: 50%;
         aspect-ratio: var(--ratio);
         background-color: rgb(97, 122, 96);
-        transform-origin: center;
+        overflow: hidden;
+    }
+
+    &Text {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: orange;
+        font-size: 30rem;
+        line-height: 1;
+        text-align: center;
+        pointer-events: none;
+    }
+
+    &TextOne {
+        color: orange;
+        font-size: 30rem;
+    }
+
+    &TextTwo {
+        color: rgb(138, 95, 17);
+        font-size: 20rem;
     }
 }
 

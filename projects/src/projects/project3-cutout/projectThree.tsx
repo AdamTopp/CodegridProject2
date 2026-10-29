@@ -10,12 +10,15 @@ const ProjectThree = () => {
     const [projects, setProjects] = useState<string[]>([]);
     const interactionWrapperRef = useRef<HTMLDivElement>(null);
     const cardOne = useRef<HTMLDivElement>(null);
+    const textOne = useRef<HTMLDivElement>(null);
+    const textTwo = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
         const parent = interactionWrapperRef.current;
         const card = cardOne.current;
+        const text = textOne.current;
 
-        if (!parent || !card) return;
+        if (!parent || !card || !text) return;
 
         // Preserve centering separately from cursor movement.
         gsap.set(card, {
@@ -23,14 +26,28 @@ const ProjectThree = () => {
             yPercent: -50,
         });
 
+        gsap.set(text, {
+            xPercent: -50,
+            yPercent: -50,
+        });
+
+        function updateFollower() {
+            const x = gsap.getProperty(card, "x");
+            const y = gsap.getProperty(card, "y");
+
+            gsap.set(textTwo.current, { x: -x, y: -y });
+        }
+
         const xTo = gsap.quickTo(card, "x", {
             duration: 1.5,
             ease: "power3.out",
+            onUpdate: updateFollower
         });
 
         const yTo = gsap.quickTo(card, "y", {
             duration: 1.5,
             ease: "power3.out",
+            onUpdate: updateFollower
         });
 
         const clamp = (value: number, min: number, max: number) =>
@@ -85,7 +102,18 @@ const ProjectThree = () => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.interactionWrapper} ref={interactionWrapperRef}>
-                <div className={styles.interactionWrapperCard} ref={cardOne}></div>
+                <div className={`${styles.interactionWrapperText} ${styles.interactionWrapperTextOne}`} ref={textOne}>
+                    Abecadło
+                    <br />
+                    Hasło
+                </div>
+                <div className={styles.interactionWrapperCard} ref={cardOne}>
+                    <div className={`${styles.interactionWrapperText} ${styles.interactionWrapperTextTwo}`} ref={textTwo}>
+                        Abecadło
+                        <br />
+                        Hasło
+                    </div>
+                </div>
             </div>
         </div>
     )

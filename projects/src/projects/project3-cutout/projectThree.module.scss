@@ -11,47 +11,29 @@
     background-color: wheat;
 }
 
-.testContent {
-    font-size: 20rem;
-    line-height: 1;
-    color: rgb(160, 50, 50);
-    text-align: center;
-}
-
-.card {
+.interactionWrapper {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    --padding: 42px;
     --ratio: 2 / 3;
+    --padding: 42px;
     aspect-ratio: var(--ratio);
-    overflow: hidden;
-    
+    background: rgb(126, 141, 141);
+    width: min(
+        calc(100vw - 2 * var(--padding)),
+        calc(100vh * var(--ratio))
+    );
 
-    &One {
-        width: min(
-            calc(100vw - 2 * var(--padding)),
-            calc(60vh * var(--ratio))
-        );
-        background-color: purple;
-
-        & > div {
-            color: blue !important;
-        }
-    }
-
-    &Two {
+    &Card {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         width: 50%;
         aspect-ratio: var(--ratio);
-        background-color: green;
-        overflow: hidden;
+        background-color: rgb(97, 122, 96);
+        transform-origin: center;
     }
 }
 
-.content {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}

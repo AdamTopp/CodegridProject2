@@ -8,66 +8,73 @@ gsap.registerPlugin(useGSAP);
 
 const ProjectThree = () => { 
     const [projects, setProjects] = useState<string[]>([]);
-    const cardOneRef = useRef<HTMLDivElement>(null);
-    const contentOneRef = useRef<HTMLDivElement>(null);
+    const interactionWrapperRef = useRef<HTMLDivElement>(null);
+    const cardOne = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
-        const element = contentOneRef.current;
-        const wrapper = cardOneRef.current;
+        const parent = interactionWrapperRef.current;
+        const card = cardOne.current;
 
-        if (!element || !wrapper) return;
+        if (!parent || !card) return;
 
-        const radius = 250;
+        // Preserve centering separately from cursor movement.
+        gsap.set(card, {
+            xPercent: -50,
+            yPercent: -50,
+        });
 
-        const xTo = gsap.quickTo(element, "x", {
-            duration: 0.5,
+        const xTo = gsap.quickTo(card, "x", {
+            duration: 0.35,
             ease: "power3.out",
         });
 
-        const yTo = gsap.quickTo(element, "y", {
-            duration: 0.5,
+        const yTo = gsap.quickTo(card, "y", {
+            duration: 0.35,
             ease: "power3.out",
         });
 
-        // const handleMouseMove = (e: MouseEvent) => {
-        //     const rect = wrapper.getBoundingClientRect();
+        const clamp = (value: number, min: number, max: number) =>
+            Math.max(min, Math.min(max, value));
 
-        //     const centerX = rect.left + rect.width / 2;
-        //     const centerY = rect.top + rect.height / 2;
+        const handleMouseMove = (event: MouseEvent) => {
+            const parentRect = parent.getBoundingClientRect();
 
-        //     const dx = e.clientX - centerX;
-        //     const dy = e.clientY - centerY;
+            // Maximum distance the inner card can travel
+            // without crossing the parent's edges.
+            const maxX = Math.max(
+                0,
+                (parentRect.width - card.offsetWidth) / 2
+            );
 
-        //     const distance = Math.hypot(dx, dy);
+            const maxY = Math.max(
+                0,
+                (parentRect.height - card.offsetHeight) / 2
+            );
 
-        //     if (distance < radius) {
-        //         xTo(dx);
-        //         yTo(dy);
-        //     } else {
-        //         xTo(centerX);
-        //         yTo(centerY);
-        //     }
-        // };
+            // Cursor position relative to the parent's center.
+            const targetX =
+                event.clientX -
+                (parentRect.left + parentRect.width / 2);
 
-        // window.addEventListener("mousemove", handleMouseMove);
+            const targetY =
+                event.clientY -
+                (parentRect.top + parentRect.height / 2);
+
+            xTo(clamp(targetX, -maxX, maxX));
+            yTo(clamp(targetY, -maxY, maxY));
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
 
         return () => {
-            // window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mousemove", handleMouseMove);
         };
-    }, []);
+    });
 
     return (
         <div className={styles.wrapper}>
-            <div>
-                
-            </div>
-            <div className={`${styles.content} ${styles.testContent}`}>HHHHMMHM <br /> HHHHMMHM</div>
-            <div className={`${styles.card} ${styles.cardOne}`}>
-                <div className={`${styles.content} ${styles.testContent}`}>Abecadło <br /> Testing</div>
-
-                {/* <div ref={contentOneRef} className={`${styles.cardTwo}`}>
-                    <div ref={contentOneRef} className={`${styles.content} ${styles.testContent}`}>HHHHMMHM <br /> HHHHMMHM</div>
-                </div> */}
+            <div className={styles.interactionWrapper} ref={interactionWrapperRef}>
+                <div className={styles.interactionWrapperCard} ref={cardOne}></div>
             </div>
         </div>
     )

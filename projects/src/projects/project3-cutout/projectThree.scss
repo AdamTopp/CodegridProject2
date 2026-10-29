@@ -1,0 +1,53 @@
+
+.page {
+  min-height: 100vh;
+  background: #f1eee8;
+  color: #171717;
+}
+
+.page-content {
+  padding: 15vw 10vw;
+
+  h1 {
+    font-size: clamp(3rem, 8vw, 8rem);
+  }
+}
+
+.reveal-window {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 120px;
+  height: 120px;
+
+  overflow: hidden;
+  border-radius: 50%;
+
+  background: #171717;
+  color: #fff;
+
+  pointer-events: none;
+  z-index: 10;
+  will-change: transform;
+}
+
+.reveal-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  min-height: 100vh;
+
+  padding: 15vw 10vw;
+  box-sizing: border-box;
+
+  h1 {
+    font-size: clamp(3rem, 8vw, 8rem);
+  }
+
+  button {
+    pointer-events: auto;
+  }
+}

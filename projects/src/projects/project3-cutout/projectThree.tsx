@@ -6,10 +6,16 @@ import { gsap } from "gsap";
 
 gsap.registerPlugin(useGSAP);
 
+interface Position {
+    x: number,
+    y: number
+}
+
 const ProjectThree = () => { 
     const [projects, setProjects] = useState<string[]>([]);
     const interactionWrapperRef = useRef<HTMLDivElement>(null);
     const cardOne = useRef<HTMLDivElement>(null);
+    const position = useRef<Position>({ x: 0, y: 0});
 
     useGSAP(() => {
         const parent = interactionWrapperRef.current;
@@ -24,12 +30,22 @@ const ProjectThree = () => {
         });
 
         const xTo = gsap.quickTo(card, "x", {
-            duration: 0.35,
+            duration: 0.5,
             ease: "power3.out",
         });
 
         const yTo = gsap.quickTo(card, "y", {
-            duration: 0.35,
+            duration: 0.5,
+            ease: "power3.out",
+        });
+
+        const xReturn = gsap.quickTo(card, "x", {
+            duration: 2,
+            ease: "power3.out",
+        });
+
+        const yReturn = gsap.quickTo(card, "y", {
+            duration: 2,
             ease: "power3.out",
         });
 
@@ -64,10 +80,22 @@ const ProjectThree = () => {
             yTo(clamp(targetY, -maxY, maxY));
         };
 
-        window.addEventListener("mousemove", handleMouseMove);
+        const handleMouseLeave = (event: MouseEvent) => {
+            gsap.to(card, {
+                x: 0,
+                y: 0,
+                duration: 3,
+                ease: "power3.out",
+                overwrite: true,
+            });
+        };
+
+        parent.addEventListener("mousemove", handleMouseMove);
+        parent.addEventListener("mouseleave", handleMouseLeave);
 
         return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
+            parent.removeEventListener("mousemove", handleMouseMove);
+            parent.removeEventListener("mouseleave", handleMouseLeave);
         };
     });
 

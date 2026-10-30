@@ -10,32 +10,41 @@ const ProjectThree = () => {
     const [projects, setProjects] = useState<string[]>([]);
     const interactionWrapperRef = useRef<HTMLDivElement>(null);
     const cardOne = useRef<HTMLDivElement>(null);
+    const cardTwo = useRef<HTMLDivElement>(null);
     const textOne = useRef<HTMLDivElement>(null);
     const textTwo = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
         const parent = interactionWrapperRef.current;
         const card = cardOne.current;
-        const text = textOne.current;
+        const card2 = cardTwo.current;
 
-        if (!parent || !card || !text) return;
+        const text = textOne.current;
+        const text2 = textTwo.current;
+
+        if (!parent || !card || !card2 || !text) return;
 
         // Preserve centering separately from cursor movement.
         gsap.set(card, {
             xPercent: -50,
             yPercent: -50,
+            rotate: 30
         });
 
-        gsap.set(text, {
+        gsap.set(card2, {
             xPercent: -50,
             yPercent: -50,
+        });
+
+        gsap.set(text2, {
+            rotate: -30
         });
 
         function updateFollower() {
             const x = gsap.getProperty(card, "x");
             const y = gsap.getProperty(card, "y");
 
-            gsap.set(textTwo.current, { x: -x, y: -y });
+            gsap.set(text2, {xPercent: -50, yPercent: -50, x: -x, y: -y });
         }
 
         const xTo = gsap.quickTo(card, "x", {
@@ -50,24 +59,50 @@ const ProjectThree = () => {
             onUpdate: updateFollower
         });
 
+        const xTo2 = gsap.quickTo(card2, "x", {
+            duration: 2.5,
+            ease: "power3.out",
+        });
+
+        const yTo2 = gsap.quickTo(card2, "y", {
+            duration: 2.5,
+            ease: "power3.out",
+        });
+
         const clamp = (value: number, min: number, max: number) =>
             Math.max(min, Math.min(max, value));
 
         const handleMouseMove = (event: MouseEvent) => {
             xTo.tween.duration(1.5);
             yTo.tween.duration(1.5);
+            xTo2.tween.duration(1.5);
+            yTo2.tween.duration(1.5);
             const parentRect = parent.getBoundingClientRect();
+            const card1Rect = card.getBoundingClientRect();
+            console.log(card1Rect);
 
             // Maximum distance the inner card can travel
             // without crossing the parent's edges.
+            const cardWidth = card1Rect.right - card1Rect.left
+            const cardHeight = card1Rect.bottom - card1Rect.top
             const maxX = Math.max(
                 0,
-                (parentRect.width - card.offsetWidth) / 2
+                (parentRect.width - cardWidth) / 2
             );
 
             const maxY = Math.max(
                 0,
-                (parentRect.height - card.offsetHeight) / 2
+                (parentRect.height - cardHeight) / 2
+            );
+
+            const maxX2 = Math.max(
+                0,
+                (card1Rect.width - card2.offsetWidth) / 2
+            );
+
+            const maxY2 = Math.max(
+                0,
+                (card1Rect.height - card2.offsetHeight) / 2
             );
 
             // Cursor position relative to the parent's center.
@@ -81,13 +116,20 @@ const ProjectThree = () => {
 
             xTo(clamp(targetX, -maxX, maxX));
             yTo(clamp(targetY, -maxY, maxY));
+
+            xTo2(clamp(targetX, -maxX2, maxX2));
+            yTo2(clamp(targetY, -maxY2, maxY2));
         };
 
         const handleMouseLeave = (event: MouseEvent) => {
-            xTo.tween.duration(7);
-            yTo.tween.duration(7);
+            xTo.tween.duration(2);
+            yTo.tween.duration(2);
+            xTo2.tween.duration(2);
+            yTo2.tween.duration(2);
             xTo(0);
             yTo(0);
+            xTo2(0);
+            yTo2(0);
         };
 
         parent.addEventListener("mousemove", handleMouseMove);
@@ -113,6 +155,7 @@ const ProjectThree = () => {
                         <br />
                         Hasło
                     </div>
+                    <div className={`${styles.interactionWrapperCard} ${styles.interactionWrapperCardTwo}`} ref={cardTwo}></div>
                 </div>
             </div>
         </div>

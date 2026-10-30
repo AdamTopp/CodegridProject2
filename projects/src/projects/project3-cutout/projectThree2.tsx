@@ -40,8 +40,12 @@ const ProjectThree = () => {
     useGSAP(() => {
         const negateRotation = () => {
             const rotation = gsap.getProperty(`.${styles.cardTop}`, '--rotate-deg')
-            console.log(rotation);
             gsap.set('#test1', { rotate: -rotation})
+        }
+
+        const negateRotation2 = () => {
+            const rotation = gsap.getProperty(`.${styles.cardTwo}`, '--rotate-deg')
+            gsap.set('#test2', { rotate: -rotation})
         }
 
         const xTo = gsap.quickTo(`.${styles.cardTop}`, "--mask-x", {
@@ -52,6 +56,22 @@ const ProjectThree = () => {
         const yTo = gsap.quickTo(`.${styles.cardTop}`, "--mask-y", {
             duration: 0.4,
             ease: "power3.out",
+        });
+
+        const xTo2 = gsap.quickTo(`.${styles.cardTwo}`, "--mask-x", {
+            duration: 0.4,
+            ease: "power3.out",
+        });
+
+        const yTo2 = gsap.quickTo(`.${styles.cardTwo}`, "--mask-y", {
+            duration: 0.4,
+            ease: "power3.out",
+        });
+
+        const rotateTo2 = gsap.quickTo(`.${styles.cardTwo}`, "--rotate-deg", {
+            duration: 0.4,
+            ease: "power3.out",
+            onUpdate: negateRotation2
         });
 
         const rotateTo = gsap.quickTo(`.${styles.cardTop}`, "--rotate-deg", {
@@ -66,7 +86,10 @@ const ProjectThree = () => {
             const rotationSum = xRotation + yRotation;
             xTo((event.clientX / window.innerWidth) * 100);
             yTo((event.clientY / window.innerHeight) * 100);
+            xTo2((event.clientX / window.innerWidth) * 100);
+            yTo2((event.clientY / window.innerHeight) * 100);
             rotateTo(rotationSum);
+            rotateTo2(-rotationSum);
         };
 
         const handleMouseLeave = (event) => {

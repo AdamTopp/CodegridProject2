@@ -52,10 +52,14 @@
 }
 
 .cardTwo {
+    --mask-x: 50;
+    --mask-y: 50;
+    --rotate-deg: 0;
+    mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
+    transform: rotate(calc(var(--rotate-deg) * 1deg));
     background-color:  rgb(154, 226, 154);
     color: darkolivegreen;
     mask-image: url('./maskingTest.png');
     mask-size: 400px 500px;
     mask-repeat: no-repeat;
-    mask-position: center center;
 }

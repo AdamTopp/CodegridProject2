@@ -8,45 +8,16 @@ gsap.registerPlugin(useGSAP);
 
 const ProjectThree = () => { 
 
-    // useGSAP(() => {
-    //     const negateRotation = () => {
-    //         const rotation = gsap.getProperty(`.${styles.cardTop}`, 'rotate')
-    //         gsap.set('#test1', { rotate: -rotation})
-    //     }
-
-    //     const negateRotation2 = () => {
-    //         const rotation = gsap.getProperty(`.${styles.cardTwo}`, 'rotate')
-    //         gsap.set('#test2', { rotate: -rotation})
-    //         gsap.set('#middletext', { rotate: rotation})
-    //     }
-    //     // gsap.to(`.${styles.cardTop}`, {
-    //     //     // maskPosition: '25% 25%',
-    //     //     // rotate: 30,
-    //     //     repeat: -1,
-    //     //     yoyo: true,
-    //     //     duration: 1,
-    //     //     onUpdate: negateRotation
-    //     // })
-
-    //     // gsap.to(`.${styles.cardTwo}`, {
-    //     //     rotate: -30,
-    //     //     repeat: -1,
-    //     //     yoyo: true,
-    //     //     duration: 1,
-    //     //     onUpdate: negateRotation2
-    //     // })
-    // });
-
     useGSAP(() => {
         const negateRotation = () => {
             const rotation = gsap.getProperty(`.${styles.cardTop}`, '--rotate-deg')
             gsap.set('#test1', { rotate: -rotation})
         }
 
-        const negateRotation2 = () => {
-            const rotation = gsap.getProperty(`.${styles.cardTwo}`, '--rotate-deg')
-            gsap.set('#test2', { rotate: -rotation})
-        }
+        // const negateRotation2 = () => {
+        //     const rotation = gsap.getProperty(`.${styles.cardTwo}`, '--rotate-deg')
+        //     gsap.set('#test2', { rotate: -rotation})
+        // }
 
         const xTo = gsap.quickTo(`.${styles.cardTop}`, "--mask-x", {
             duration: 0.4,
@@ -58,12 +29,12 @@ const ProjectThree = () => {
             ease: "power3.out",
         });
 
-        const xTo2 = gsap.quickTo(`.${styles.cardTwo}`, "--mask-x", {
+        const xTo2 = gsap.quickTo(`.${styles.cardTwo}`, "left", {
             duration: 0.4,
             ease: "power3.out",
         });
 
-        const yTo2 = gsap.quickTo(`.${styles.cardTwo}`, "--mask-y", {
+        const yTo2 = gsap.quickTo(`.${styles.cardTwo}`, "top", {
             duration: 0.4,
             ease: "power3.out",
         });
@@ -71,7 +42,7 @@ const ProjectThree = () => {
         const rotateTo2 = gsap.quickTo(`.${styles.cardTwo}`, "--rotate-deg", {
             duration: 0.4,
             ease: "power3.out",
-            onUpdate: negateRotation2
+            // onUpdate: negateRotation2
         });
 
         const rotateTo = gsap.quickTo(`.${styles.cardTop}`, "--rotate-deg", {
@@ -86,8 +57,8 @@ const ProjectThree = () => {
             const rotationSum = xRotation + yRotation;
             xTo((event.clientX / window.innerWidth) * 100);
             yTo((event.clientY / window.innerHeight) * 100);
-            xTo2((event.clientX / window.innerWidth) * 100);
-            yTo2((event.clientY / window.innerHeight) * 100);
+            xTo2(event.clientX);
+            yTo2(event.clientY);
             rotateTo(rotationSum);
             rotateTo2(-rotationSum);
         };
@@ -113,7 +84,7 @@ const ProjectThree = () => {
                 <div className={`${styles.card} ${styles.cardTop}`}>
                     <div id='test1' className={styles.cardOneContent}>
                         <div id='middletext'>Caedrel</div>
-                        <div className={`${styles.card} ${styles.cardTwo}`}>
+                        <div className={`${styles.cardTwo}`}>
                             <div id='test2' className={styles.cardOneContent}>
                                 K'santeusz
                             </div>

@@ -2,6 +2,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
 @import url("https://use.typekit.net/nfv7lgc.css");
 
+@mixin responsive-mask($ratio: 3 / 4, $padding: 12px, $modifier: 1) {
+    --mask-ratio: #{$ratio};
+    --mask-padding: #{$padding};
+    --mask-scale: #{$modifier};
+
+    --mask-width-base: min(
+        calc(100vw - 2 * var(--mask-padding)),
+        calc(100vh * var(--mask-ratio))
+    );
+
+    --mask-width: calc(var(--mask-width-base) * var(--mask-scale));
+
+    --mask-height: calc((var(--mask-width) / var(--mask-ratio)) - calc(var(--mask-padding) * 2));
+
+    mask-size: var(--mask-width) var(--mask-height);
+}
+
 .wrapper {
     font-family: "elza", sans-serif;
     position: relative;
@@ -33,7 +50,7 @@
     color: rgb(117, 51, 51);
 
     mask-image: url('./maskingTest.png');
-    mask-size: 800px 900px;
+    @include responsive-mask(3 / 4, 2rem, 1);
 
     --mask-x: 50;
     --mask-y: 50;
@@ -41,7 +58,6 @@
     mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
     transform: rotate(calc(var(--rotate-deg) * 1deg));
     mask-repeat: no-repeat;
-    // mask-position: center center;
 }
 
 .cardOneContent {
@@ -65,7 +81,9 @@
     background-color:  rgb(154, 226, 154);
     color: darkolivegreen;
     mask-image: url('./maskingTest.png');
-    mask-size: 400px 500px;
+
+    --ratio: 2 / 3;
+    @include responsive-mask(3 / 4, 1px, 0.5);
     mask-repeat: no-repeat;
 
     &Marker {

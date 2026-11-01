@@ -10,14 +10,14 @@ const ProjectThree = () => {
     const [projects, setProjects] = useState<string[]>([]);
     const interactionWrapperRef = useRef<HTMLDivElement>(null);
     const cardOne = useRef<HTMLDivElement>(null);
-    const cardTwo = useRef<HTMLDivElement>(null);
+    const cardSmall = useRef<HTMLDivElement>(null);
     const textOne = useRef<HTMLDivElement>(null);
     const textTwo = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
         const parent = interactionWrapperRef.current;
         const card = cardOne.current;
-        const card2 = cardTwo.current;
+        const card2 = cardSmall.current;
 
         const text = textOne.current;
         const text2 = textTwo.current;
@@ -155,7 +155,7 @@ const ProjectThree = () => {
                         <br />
                         Hasło
                     </div>
-                    <div className={`${styles.interactionWrapperCard} ${styles.interactionWrapperCardTwo}`} ref={cardTwo}></div>
+                    <div className={`${styles.interactionWrapperCard} ${styles.interactionWrappercardSmall}`} ref={cardSmall}></div>
                 </div>
             </div>
         </div>

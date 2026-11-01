@@ -20,7 +20,6 @@
 }
 
 .wrapper {
-    font-family: "elza", sans-serif;
     position: relative;
     width: 100%;
     height: 100svh;
@@ -30,91 +29,132 @@
 
 
 .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
     position: absolute;
     top: 0;
     left: 0;
-    background-color: rgb(159, 187, 178);
-    color: rgb(51, 51, 117);
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    line-height: 0.8;
-    justify-content: center;
-    align-items: center;
+
     font-size: 40rem;
+    line-height: 0.8;
+
+    background-color: rgb(159, 187, 178);
+    color: rgb(51, 51, 117);
+
+    &Shadow {
+        background-color: rgba(255, 166, 0, 0.315);
+        width: var(--mask-width);
+        height: var(--mask-height);
+    }
 }
 
-.cardTop {
+.cardMiddle {
+    --mask-x: 50;
+    --mask-y: 50;
+    --rotate-deg: 0;
+
     background-color: rgb(187, 159, 159);
     color: rgb(117, 51, 51);
 
+    transform: rotate(calc(var(--rotate-deg) * 1deg));
     mask-image: url('./maskingTest.png');
-    @include responsive-mask(3 / 4, 2rem, 1);
+    mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
+    mask-repeat: no-repeat;
+    @include responsive-mask(3 / 4, 2rem, 0.75);
+}
 
+.cardSmall {
     --mask-x: 50;
     --mask-y: 50;
     --rotate-deg: 0;
-    mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
+    --ratio: 2 / 3;
+
+    color: darkolivegreen;
+    background-color:  rgb(154, 226, 154);
+
     transform: rotate(calc(var(--rotate-deg) * 1deg));
+    mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
+    mask-image: url('./maskingTest.png');
     mask-repeat: no-repeat;
+    @include responsive-mask(3 / 4, 1px, 0.5);
 }
 
-.cardOneContent {
-    width: 100%;
-    height: 100%;
-    position: fixed;
+.marker {
+    position: absolute;
+    top: calc(
+        (100% - var(--mask-height)) * var(--mask-y) / 100 + var(--mask-height) /2
+    );
+    left: calc(
+        (100% - var(--mask-width)) * var(--mask-x) / 100 + var(--mask-width)/2
+    );
+    transform: translate(-50%, -50%);
+}
+
+.cardContent {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    position: fixed;
+    width: 100%;
+    height: 100%;
+
     line-height: 0.8;
     font-size: 40rem;
-}
 
-.cardTwo {
-    --mask-x: 50;
-    --mask-y: 50;
-    --rotate-deg: 0;
-    mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
-    transform: rotate(calc(var(--rotate-deg) * 1deg));
-    background-color:  rgb(154, 226, 154);
-    color: darkolivegreen;
-    mask-image: url('./maskingTest.png');
+    &Middle {
+        line-height: 1;
+        font-size: 30rem;
+    }
 
-    --ratio: 2 / 3;
-    @include responsive-mask(3 / 4, 1px, 0.5);
-    mask-repeat: no-repeat;
-
-    &Marker {
-        position: absolute;
-        width: 2px;
-        height: 2px;
-        top: calc(
-            (100% - 500px) * var(--mask-y) / 100 + 250px
-        );
-        left: calc(
-            (100% - 400px) * var(--mask-x) / 100 + 200px
-        );
-        background-color: red;
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
+    &Small {
+        line-height: 0.8;
+        font-size: 20rem;
     }
 }
 
 .tracking {
     --custom-y: 50;
     --custom-x: 50;
-    position: absolute;
-    top: calc(var(--custom-y) * 1%);
-    left: calc(var(--custom-x) * 1%);
-    transform: translate(-50%, -50%);
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
+
+    position: absolute;
+    top: calc(var(--custom-y) * 1%);
+    left: calc(var(--custom-x) * 1%);
+
+    transform: translate(-50%, -50%);
+
     font-size: 30rem;
     line-height: 0.8;
-    width: max-content;
+    text-align: center;
+}
+
+.tracking2 {
+    --custom-y: 50;
+    --custom-x: 50;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    top: calc(var(--custom-y) * 1%);
+    left: calc(var(--custom-x) * 1%);
+
+    transform: translate(-50%, -50%);
+
+    font-size: 30rem;
+    line-height: 0.8;
+    text-align: center;
 }

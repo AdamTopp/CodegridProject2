@@ -15,7 +15,7 @@ const ProjectThree = () => {
             if (m) {
                 const { x } = m.getBoundingClientRect();
                 const trackerX = x / window.innerWidth * 100;
-                gsap.set(`.${styles.tracking}`, { "--custom-x": trackerX });
+                gsap.set([`.${styles.tracking}`, `.${styles.tracking2}`], { "--custom-x": trackerX });
             }
         }
 
@@ -24,46 +24,46 @@ const ProjectThree = () => {
             if (m) {
                 const { y } = m.getBoundingClientRect()
                 const trackerY = y / window.innerHeight * 100;
-                gsap.set(`.${styles.tracking}`, { "--custom-y": trackerY });
+                gsap.set([`.${styles.tracking}`, `.${styles.tracking2}`], { "--custom-y": trackerY });
             }
         }
 
         const negateRotation = () => {
-            const rotation = gsap.getProperty(`.${styles.cardTop}`, '--rotate-deg')
-            gsap.set('#test1', { rotate: -rotation})
+            const rotation = gsap.getProperty(`.${styles.cardMiddle}`, '--rotate-deg')
+            gsap.set('#contentMiddle', { rotate: -rotation})
         }
 
         const negateRotation2 = () => {
-            const rotation = gsap.getProperty(`.${styles.cardTwo}`, '--rotate-deg')
-            gsap.set('#test2', { rotate: -rotation})
+            const rotation = gsap.getProperty(`.${styles.cardSmall}`, '--rotate-deg')
+            gsap.set(['#contentSmall', `.${styles.tracking2}`], { rotate: -rotation})
             gsap.set(`.${styles.tracking}`, { rotate: rotation})
         }
 
-        const xTo = gsap.quickTo([`.${styles.cardTwo}`, `.${styles.cardTop}`], "--mask-x", {
+        const xTo = gsap.quickTo([`.${styles.cardSmall}`, `.${styles.cardMiddle}`], "--mask-x", {
             duration: 0.4,
             ease: "power3.out",
             onUpdate: textMoveX
         });
 
-        const yTo = gsap.quickTo([`.${styles.cardTwo}`, `.${styles.cardTop}`], "--mask-y", {
+        const yTo = gsap.quickTo([`.${styles.cardSmall}`, `.${styles.cardMiddle}`], "--mask-y", {
             duration: 0.4,
             ease: "power3.out",
             onUpdate: textMoveY
         });
 
-        const rotateTo2 = gsap.quickTo(`.${styles.cardTwo}`, "--rotate-deg", {
+        const rotateTo2 = gsap.quickTo(`.${styles.cardSmall}`, "--rotate-deg", {
             duration: 0.4,
             ease: "power3.out",
             onUpdate: negateRotation2
         });
 
-        const rotateTo = gsap.quickTo(`.${styles.cardTop}`, "--rotate-deg", {
+        const rotateTo = gsap.quickTo(`.${styles.cardMiddle}`, "--rotate-deg", {
             duration: 0.4,
             ease: "power3.out",
             onUpdate: negateRotation
         });
 
-        const handleMouseMove = (event) => {
+        const handleMouseMove = (event: MouseEvent) => {
             const xRotation = (1 - (event.clientX / window.innerWidth)) * 5;
             const yRotation = ((event.clientY / window.innerHeight)) * 5;
             const rotationSum = xRotation + yRotation;
@@ -73,7 +73,7 @@ const ProjectThree = () => {
             rotateTo2(-rotationSum);
         };
 
-        const handleMouseLeave = (event) => {
+        const handleMouseLeave = (event: MouseEvent) => {
             xTo(0);
             yTo(0);
         };
@@ -95,20 +95,21 @@ const ProjectThree = () => {
                     <span>One</span>
                     <span>Session</span> 
                 </div>
-                <div className={`${styles.card} ${styles.cardTop}`}>
-                    <div id='test1' className={styles.cardOneContent}>
+                <div className={`${styles.card} ${styles.cardMiddle}`}>
+                    <div id='contentMiddle' className={`${styles.cardContent} ${styles.cardContentMiddle}`}>
                         <div className={`${styles.tracking}`}>
                             <span>Part</span>
                             <span>One</span>
                             <span>Session</span> 
                         </div>
-                        <div className={`${styles.card} ${styles.cardTwo}`}>
-                            <div id='test2' className={styles.cardOneContent}>
+                        <div className={`${styles.tracking2} ${styles.cardShadow}`}></div>
+                        <div className={`${styles.card} ${styles.cardSmall}`}>
+                            <div id='contentSmall' className={`${styles.cardContent} ${styles.cardContentSmall}`}>
                                 <span>Part</span>
                                 <span>One</span>
                                 <span>Session</span> 
                             </div>
-                            <div id='marker' className={`${styles.cardTwoMarker}`} ref={marker}></div>
+                            <div id='marker' className={`${styles.marker}`} ref={marker}></div>
                         </div>
                     </div>
                 </div>

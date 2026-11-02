@@ -58,6 +58,13 @@
         width: calc(var(--mask-width-small) + 1px);
         height: calc(var(--mask-height-small) + 1px);
     }
+
+    &ShadowMiddle {
+        // background-color: rgba(255, 166, 0, 0.315);
+        box-shadow: 0 0 16px 16px inset rgba(37, 29, 29, 0.39);
+        width: calc(var(--mask-width-middle) + 1px);
+        height: calc(var(--mask-height-middle) + 1px);
+    }
 }
 
 .cardMiddle {
@@ -84,7 +91,6 @@
     mask-image: url('./maskingTest.png');
     mask-repeat: no-repeat;
     mask-size: var(--mask-width-small) var(--mask-height-small);
-    // @include responsive-mask(3 / 4, 1px, 0.5);
 }
 
 .marker {
@@ -96,6 +102,21 @@
         (100% - var(--mask-width-small)) * var(--mask-x) / 100 + var(--mask-width-small)/2
     );
     transform: translate(-50%, -50%);
+}
+
+.marker2 {
+    position: absolute;
+    top: calc(
+        (100% - var(--mask-height-middle)) * var(--mask-y) / 100 + var(--mask-height-middle) /2
+    );
+    left: calc(
+        (100% - var(--mask-width-middle)) * var(--mask-x) / 100 + var(--mask-width-middle)/2
+    );
+    transform: translate(-50%, -50%);
+    background: red;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
 }
 
 .cardContent {
@@ -140,4 +161,24 @@
     font-size: 30rem;
     line-height: 0.8;
     text-align: center;
+}
+
+.trackingMiddle {
+    --custom-y: 50;
+    --custom-x: 50;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    top: calc(
+        (100% - var(--mask-height-middle)) * var(--mask-y) / 100 + var(--mask-height-middle)/2
+    );
+    left: calc(
+        (100% - var(--mask-width-middle)) * var(--mask-x) / 100 + var(--mask-width-middle)/2
+    );
+
+    transform: translate(-50%, -50%);
 }

@@ -47,7 +47,7 @@ const ProjectThree = () => {
             onUpdate: textMoveX
         });
 
-        const yTo = gsap.quickTo([`.${styles.cardSmall}`], "--mask-y", {
+        const yTo = gsap.quickTo([`.${styles.card}`], "--mask-y", {
             duration: 0.4,
             ease: "power3.out",
             onUpdate: textMoveY
@@ -98,7 +98,6 @@ const ProjectThree = () => {
 
     return (
         <div className={styles.wrapper}>
-            <div className={styles.interactionWrapper}>
                 <div className={styles.card}>
                     <span>Part</span>
                     <span>One</span>
@@ -121,8 +120,8 @@ const ProjectThree = () => {
                         </div>
                         <div className={`${styles.tracking} ${styles.cardShadow} trackingContent`}></div>
                     </div>
+                    <div className={`${styles.trackingMiddle} ${styles.cardShadowMiddle}`}></div>
                 </div>
-            </div>
         </div>
     )
 }

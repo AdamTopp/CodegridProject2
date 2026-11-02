@@ -8,6 +8,8 @@ gsap.registerPlugin(useGSAP);
 
 const ProjectThree = () => {
     const marker = useRef<HTMLDivElement>(null);
+    const cardMiddle = useRef<HTMLDivElement>(null);
+    const cardSmall = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
         const textMoveX = () => {
@@ -15,7 +17,7 @@ const ProjectThree = () => {
             if (m) {
                 const { x } = m.getBoundingClientRect();
                 const trackerX = x / window.innerWidth * 100;
-                gsap.set([`.${styles.tracking}`, `.${styles.tracking2}`], { "--custom-x": trackerX });
+                gsap.set(`.${styles.tracking}`, { "--custom-x": trackerX });
             }
         }
 
@@ -24,7 +26,7 @@ const ProjectThree = () => {
             if (m) {
                 const { y } = m.getBoundingClientRect()
                 const trackerY = y / window.innerHeight * 100;
-                gsap.set([`.${styles.tracking}`, `.${styles.tracking2}`], { "--custom-y": trackerY });
+                gsap.set(`.${styles.tracking}`, { "--custom-y": trackerY });
             }
         }
 
@@ -35,8 +37,8 @@ const ProjectThree = () => {
 
         const negateRotation2 = () => {
             const rotation = gsap.getProperty(`.${styles.cardSmall}`, '--rotate-deg')
-            gsap.set(['#contentSmall', `.${styles.tracking2}`], { rotate: -rotation})
-            gsap.set(`.${styles.tracking}`, { rotate: rotation})
+            gsap.set('#contentSmall', { rotate: -rotation})
+            gsap.set(`.trackingContent`, { rotate: rotation})
         }
 
         const xTo = gsap.quickTo([`.${styles.cardSmall}`, `.${styles.cardMiddle}`], "--mask-x", {
@@ -63,6 +65,16 @@ const ProjectThree = () => {
             onUpdate: negateRotation
         });
 
+        // const handleMouseMove = (event: MouseEvent) => {
+        //     const xRotation = (1 - (event.clientX / window.innerWidth)) * 5;
+        //     const yRotation = ((event.clientY / window.innerHeight)) * 5;
+        //     const rotationSum = xRotation + yRotation;
+        //     xTo((event.clientX / window.innerWidth) * 100);
+        //     yTo((event.clientY / window.innerHeight) * 100);
+        //     rotateTo(rotationSum);
+        //     rotateTo2(-rotationSum);
+        // };
+
         const handleMouseMove = (event: MouseEvent) => {
             const xRotation = (1 - (event.clientX / window.innerWidth)) * 5;
             const yRotation = ((event.clientY / window.innerHeight)) * 5;
@@ -79,6 +91,7 @@ const ProjectThree = () => {
         };
 
         window.addEventListener("mousemove", handleMouseMove);
+        // window.addEventListener("resize", handleMouseMove);
         window.addEventListener("mouseleave", handleMouseLeave);
 
         return () => {
@@ -96,14 +109,13 @@ const ProjectThree = () => {
                     <span>Session</span> 
                 </div>
                 <div className={`${styles.card} ${styles.cardMiddle}`}>
-                    <div id='contentMiddle' className={`${styles.cardContent} ${styles.cardContentMiddle}`}>
-                        <div className={`${styles.tracking}`}>
+                    <div id='contentMiddle' className={`${styles.cardContent} ${styles.cardContentMiddle}`} ref={cardMiddle}>
+                        <div className={`${styles.tracking} trackingContent`}>
                             <span>Part</span>
                             <span>One</span>
                             <span>Session</span> 
                         </div>
-                        <div className={`${styles.tracking2} ${styles.cardShadow}`}></div>
-                        <div className={`${styles.card} ${styles.cardSmall}`}>
+                        <div className={`${styles.card} ${styles.cardSmall}`} ref={cardSmall}>
                             <div id='contentSmall' className={`${styles.cardContent} ${styles.cardContentSmall}`}>
                                 <span>Part</span>
                                 <span>One</span>
@@ -111,6 +123,7 @@ const ProjectThree = () => {
                             </div>
                             <div id='marker' className={`${styles.marker}`} ref={marker}></div>
                         </div>
+                        <div className={`${styles.tracking} ${styles.cardShadow} trackingContent`}></div>
                     </div>
                 </div>
             </div>

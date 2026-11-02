@@ -41,13 +41,13 @@ const ProjectThree = () => {
             gsap.set(`.trackingContent`, { rotate: rotation})
         }
 
-        const xTo = gsap.quickTo([`.${styles.cardSmall}`, `.${styles.cardMiddle}`], "--mask-x", {
+        const xTo = gsap.quickTo([`.${styles.card}`], "--mask-x", {
             duration: 0.4,
             ease: "power3.out",
             onUpdate: textMoveX
         });
 
-        const yTo = gsap.quickTo([`.${styles.cardSmall}`, `.${styles.cardMiddle}`], "--mask-y", {
+        const yTo = gsap.quickTo([`.${styles.cardSmall}`], "--mask-y", {
             duration: 0.4,
             ease: "power3.out",
             onUpdate: textMoveY
@@ -65,15 +65,10 @@ const ProjectThree = () => {
             onUpdate: negateRotation
         });
 
-        // const handleMouseMove = (event: MouseEvent) => {
-        //     const xRotation = (1 - (event.clientX / window.innerWidth)) * 5;
-        //     const yRotation = ((event.clientY / window.innerHeight)) * 5;
-        //     const rotationSum = xRotation + yRotation;
-        //     xTo((event.clientX / window.innerWidth) * 100);
-        //     yTo((event.clientY / window.innerHeight) * 100);
-        //     rotateTo(rotationSum);
-        //     rotateTo2(-rotationSum);
-        // };
+        const handleResize = () => {
+            textMoveX();
+            textMoveY();
+        };
 
         const handleMouseMove = (event: MouseEvent) => {
             const xRotation = (1 - (event.clientX / window.innerWidth)) * 5;
@@ -91,11 +86,12 @@ const ProjectThree = () => {
         };
 
         window.addEventListener("mousemove", handleMouseMove);
-        // window.addEventListener("resize", handleMouseMove);
+        window.addEventListener("resize", handleResize);
         window.addEventListener("mouseleave", handleMouseLeave);
 
         return () => {
             window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("resize", handleResize);
             window.removeEventListener("mouseleave", handleMouseLeave);
         };
     });

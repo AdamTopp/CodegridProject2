@@ -1,5 +1,5 @@
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import styles from './projectThree2.module.scss';
 import { useGSAP } from '@gsap/react';
 import { gsap } from "gsap";
@@ -8,7 +8,6 @@ gsap.registerPlugin(useGSAP);
 
 const ProjectThree = () => {
     const marker = useRef<HTMLDivElement>(null);
-    const cardMiddle = useRef<HTMLDivElement>(null);
     const cardSmall = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
@@ -104,7 +103,7 @@ const ProjectThree = () => {
                     <span>Session</span> 
                 </div>
                 <div className={`${styles.card} ${styles.cardMiddle}`}>
-                    <div id='contentMiddle' className={`${styles.cardContent} ${styles.cardContentMiddle}`} ref={cardMiddle}>
+                    <div id='contentMiddle' className={`${styles.cardContent} ${styles.cardContentMiddle}`}>
                         <div className={`${styles.tracking} trackingContent`}>
                             <span>Part</span>
                             <span>One</span>

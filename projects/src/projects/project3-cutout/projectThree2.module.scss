@@ -10,6 +10,7 @@ $main: rgb(192, 65, 86);
     --mask-padding: #{$padding};
     --mask-scale-middle: 0.75;
     --mask-scale-small: 0.5;
+    --mask-test: 0;
 
     --mask-width-base: min(
         calc(100vw - 2 * var(--mask-padding)),
@@ -18,9 +19,14 @@ $main: rgb(192, 65, 86);
 
     --mask-width-middle: calc(var(--mask-width-base) * var(--mask-scale-middle));
     --mask-width-small: calc(var(--mask-width-base) * var(--mask-scale-small));
+    // --mask-width-middle: 100%;
+    // --mask-width-small: 100%;
 
     --mask-height-middle: calc((var(--mask-width-middle) / var(--mask-ratio)) - calc(var(--mask-padding) * 2));
     --mask-height-small: calc((var(--mask-width-small) / var(--mask-ratio)));
+
+    --mask-width-expanded: 100vw;
+    --mask-height-expanded: 100vh;
 }
 
 .wrapper {
@@ -29,6 +35,7 @@ $main: rgb(192, 65, 86);
     height: 100svh;
     overflow: hidden;
     // background-color: wheat;
+    @include responsive-mask(3 / 4, 2rem, 0.75);
 }
 
 .section {
@@ -58,7 +65,6 @@ $main: rgb(192, 65, 86);
     font-size: 40rem;
     line-height: 0.8;
 
-    @include responsive-mask(3 / 4, 2rem, 0.75);
     background-color: $background;
     color: $main;
 
@@ -66,12 +72,27 @@ $main: rgb(192, 65, 86);
         box-shadow: 0 0 6px 6px inset rgba($main, 0.39);
         width: calc(var(--mask-width-small) + 1px);
         height: calc(var(--mask-height-small) + 1px);
+        transform-origin: center center;
     }
 
     &ShadowMiddle {
         box-shadow: 0 0 16px 16px inset rgba($main, 0.19), 0 0 48px 48px inset rgba($main, 0.08);
-        width: calc(var(--mask-width-middle) + 1px);
-        height: calc(var(--mask-height-middle) + 1px);
+        // width: calc(var(--mask-width-middle) + 1px);
+        // height: calc(var(--mask-height-middle) + 1px);
+
+        --mask-current-width: calc(
+            var(--mask-width-middle) +
+            (var(--mask-width-expanded) - var(--mask-width-middle)) * var(--mask-expand, 0)
+        );
+
+        --mask-current-height: calc(
+            var(--mask-height-middle) +
+            (var(--mask-height-expanded) - var(--mask-height-middle)) * var(--mask-expand, 0)
+        );
+
+        width: calc(var(--mask-current-width) + 2px);
+        height: calc(var(--mask-current-height) + 2px);
+        transform-origin: center center;
     }
 }
 
@@ -83,9 +104,21 @@ $main: rgb(192, 65, 86);
 
     transform: rotate(calc(var(--rotate-deg) * 1deg));
     mask-image: url('./maskingTest.png');
-    mask-size: var(--mask-width-middle) var(--mask-height-middle);
+    // mask-size: var(--mask-width-middle) var(--mask-height-middle);
     mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
     mask-repeat: no-repeat;
+
+    --mask-current-width: calc(
+        var(--mask-width-middle) +
+        (var(--mask-width-expanded) - var(--mask-width-middle)) * var(--mask-expand, 0)
+    );
+
+    --mask-current-height: calc(
+        var(--mask-height-middle) +
+        (var(--mask-height-expanded) - var(--mask-height-middle)) * var(--mask-expand, 0)
+    );
+
+    mask-size: var(--mask-current-width) var(--mask-current-height);
 }
 
 .cardSmall {
@@ -98,7 +131,18 @@ $main: rgb(192, 65, 86);
     mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
     mask-image: url('./maskingTest.png');
     mask-repeat: no-repeat;
-    mask-size: var(--mask-width-small) var(--mask-height-small);
+    // mask-size: var(--mask-width-small) var(--mask-height-small);
+    --mask-current-width: calc(
+        var(--mask-width-small) +
+        (var(--mask-width-expanded) - var(--mask-width-small)) * var(--mask-expand, 0)
+    );
+
+    --mask-current-height: calc(
+        var(--mask-height-small) +
+        (var(--mask-height-expanded) - var(--mask-height-small)) * var(--mask-expand, 0)
+    );
+
+    mask-size: var(--mask-current-width) var(--mask-current-height);
 }
 
 .marker {
@@ -110,6 +154,21 @@ $main: rgb(192, 65, 86);
         (100% - var(--mask-width-small)) * var(--mask-x) / 100 + var(--mask-width-small)/2
     );
     transform: translate(-50%, -50%);
+
+    --mask-current-width: calc(
+        var(--mask-width-small) +
+        (var(--mask-width-expanded) - var(--mask-width-small)) * var(--mask-expand, 0)
+    );
+
+    --mask-current-height: calc(
+        var(--mask-height-small) +
+        (var(--mask-height-expanded) - var(--mask-height-small)) * var(--mask-expand, 0)
+    );
+
+    width: calc(var(--mask-current-width) + 2px);
+    height: calc(var(--mask-current-height) + 2px);
+    background-color: rgba($main, 0.1);
+    box-shadow: 0 0 12px 12px inset rgba($main, 0.19), 0 0 24px 24px inset rgba($main, 0.1);
 }
 
 .marker2 {
@@ -121,6 +180,10 @@ $main: rgb(192, 65, 86);
         (100% - var(--mask-width-middle)) * var(--mask-x) / 100 + var(--mask-width-middle)/2
     );
     transform: translate(-50%, -50%);
+    width: 1px;
+    height: 1px;
+    background-color: red;
+    border-radius: 50%;
 }
 
 .cardContent {

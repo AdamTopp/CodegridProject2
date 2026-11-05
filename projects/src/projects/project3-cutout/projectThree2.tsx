@@ -16,10 +16,14 @@ const ProjectThree = () => {
     const followEasing = "back.out";
     const easing = "power3.out";
     useGSAP(() => {
-        const onMouseDown = () => {
+        let xTo: gsap.QuickToFunc;
+        let yTo: gsap.QuickToFunc;
+        let rotateTo: gsap.QuickToFunc;
+        let rotateTo2: gsap.QuickToFunc;
 
-        }
-
+        let transitionTl: gsap.core.Timeline;
+        let isExpanded = false;
+        let hoverEnabled = true;
         const textMove = () => {
             const m = marker?.current;
             const w = wrapperRef?.current;
@@ -28,10 +32,10 @@ const ProjectThree = () => {
                 const wrapperRect = w.getBoundingClientRect();
 
                 const trackerX =
-                    ((markerRect.left - wrapperRect.left) / wrapperRect.width) * 100;
+                    (((markerRect.left - wrapperRect.left) + (markerRect.width / 2)) / wrapperRect.width) * 100;
 
                 const trackerY =
-                    ((markerRect.top - wrapperRect.top) / wrapperRect.height) * 100;
+                    (((markerRect.top - wrapperRect.top) + (markerRect.height / 2)) / wrapperRect.height) * 100;
 
                 gsap.set(`.${styles.tracking}`, {
                     "--custom-x": trackerX,
@@ -39,7 +43,6 @@ const ProjectThree = () => {
                 });
             }
         }
-
         const negateRotation = () => {
             const rotation = gsap.getProperty(`.${styles.cardMiddle}`, '--rotate-deg')
             gsap.set('#contentMiddle', { rotate: -rotation})
@@ -51,29 +54,103 @@ const ProjectThree = () => {
             gsap.set(`.trackingContent`, { rotate: rotation})
         }
 
-        const xTo = gsap.quickTo([`.${styles.card}`], "--mask-x", {
-            duration: followDuration,
-            ease: followEasing,
-            onUpdate: textMove
-        });
+        const createQuickTos = () => {
+            xTo = gsap.quickTo(`.${styles.card}`, "--mask-x", {
+                duration: followDuration,
+                ease: followEasing,
+                onUpdate: textMove
+            });
 
-        const yTo = gsap.quickTo([`.${styles.card}`], "--mask-y", {
-            duration: followDuration,
-            ease: followEasing,
-            onUpdate: textMove
-        });
+            yTo = gsap.quickTo(`.${styles.card}`, "--mask-y", {
+                duration: followDuration,
+                ease: followEasing,
+                onUpdate: textMove
+            });
 
-        const rotateTo2 = gsap.quickTo(`.${styles.cardSmall}`, "--rotate-deg", {
-            duration: followDuration,
-            ease: easing,
-            onUpdate: negateRotation2
-        });
+            rotateTo = gsap.quickTo(`.${styles.cardMiddle}`, "--rotate-deg", {
+                duration: followDuration,
+                ease: easing,
+                onUpdate: negateRotation
+            });
 
-        const rotateTo = gsap.quickTo(`.${styles.cardMiddle}`, "--rotate-deg", {
-            duration: followDuration,
-            ease: easing,
-            onUpdate: negateRotation
-        });
+            rotateTo2 = gsap.quickTo(`.${styles.cardSmall}`, "--rotate-deg", {
+                duration: followDuration,
+                ease: easing,
+                onUpdate: negateRotation2
+            });
+        };
+
+        createQuickTos();
+        const stopHoverAnimations = () => {
+            xTo?.tween.kill();
+            yTo?.tween.kill();
+            rotateTo?.tween.kill();
+            rotateTo2?.tween.kill();
+
+            hoverEnabled = false;
+        };
+        const toggleMasks = () => {
+            isExpanded = !isExpanded;
+
+            // Stop previous hover animations
+            stopHoverAnimations();
+
+            // Interrupt any currently running transition
+            transitionTl?.kill();
+
+            transitionTl = gsap.timeline({
+                onComplete: () => {
+                    // Only resume hover when we have returned to closed state
+                    if (!isExpanded) {
+                        hoverEnabled = true;
+                        createQuickTos();
+                        textMove();
+                    }
+                }
+            });
+
+            if (isExpanded) {
+                // EXPAND
+                transitionTl
+                    .to(`.${styles.wrapper}`, {
+                        "--mask-expand": 1,
+                        duration: 1,
+                        ease: "power3.inOut",
+                        onUpdate: () => {textMove()}
+                    }, 0)
+                    .to(`.${styles.cardMiddle}`, {
+                        "--rotate-deg": 0,
+                        "--mask-x": 50,
+                        "--mask-y": 50,
+                        duration: 1,
+                        ease: "power3.out"
+                    }, 0)
+                    .to(`.${styles.cardSmall}`, {
+                        "--rotate-deg": 0,
+                        "--mask-x": 50,
+                        "--mask-y": 50,
+                        duration: 1,
+                        ease: "power3.out"
+                    }, 0);
+
+            } else {
+                // COLLAPSE
+                transitionTl
+                    // .to(`.${styles.card}`, {
+                    //     "--mask-x": 50,
+                    //     "--mask-y": 50,
+                    //     duration: 10,
+                    //     ease: "power3.inOut"
+                    // }, 0)
+                    .to(`.${styles.wrapper}`, {
+                        "--mask-expand": 0,
+                        "--rotate-deg": 0,
+                        duration: 1,
+                        ease: "power3.inOut",
+                        onUpdate: () => {negateRotation(); textMove()}
+                    }, 0);
+            }
+        };
 
         const handleMouseMove = (event: MouseEvent) => {
             const ref = wrapperRef?.current;
@@ -107,6 +184,7 @@ const ProjectThree = () => {
 
         const ref = wrapperRef?.current;
         if (ref) {
+            ref.addEventListener("mousedown", toggleMasks);
             ref.addEventListener("mousemove", handleMouseMove);
             ref.addEventListener("mouseleave", handleMouseLeave);
             resizeObserver.observe(ref);
@@ -116,6 +194,7 @@ const ProjectThree = () => {
             const ref = wrapperRef?.current;
             if (ref) {
                 resizeObserver.disconnect();
+                ref.removeEventListener("mousedown", toggleMasks);
                 ref.removeEventListener("mousemove", handleMouseMove);
                 ref.removeEventListener("mouseleave", handleMouseLeave);
             }
@@ -145,7 +224,7 @@ const ProjectThree = () => {
                                 </div>
                                 <div id='marker' className={`${styles.marker}`} ref={marker}></div>
                             </div>
-                            <div className={`${styles.tracking} ${styles.cardShadow} trackingContent`}></div>
+                            {/* <div className={`${styles.tracking} ${styles.cardShadow} trackingContent`}></div> */}
                         </div>
                         <div className={`${styles.trackingMiddle} ${styles.cardShadowMiddle}`}></div>
                     </div>

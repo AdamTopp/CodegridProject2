@@ -31,6 +31,15 @@ $main: rgb(192, 65, 86);
     // background-color: wheat;
 }
 
+.section {
+    width: 100%;
+    height: 100svh;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    background-color: darkmagenta;
+    overflow: hidden;
+}
 
 .card {
     --mask-x: 50;

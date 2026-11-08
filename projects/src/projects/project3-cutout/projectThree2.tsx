@@ -118,20 +118,18 @@ const ProjectThree = () => {
                         ease: "power3.inOut",
                         onUpdate: () => {textMove()}
                     }, 0)
-                    .to(`.${styles.cardMiddle}`, {
+                    .to([`.${styles.cardMiddle}`, `.${styles.cardSmall}`], {
                         "--rotate-deg": 0,
                         "--mask-x": 50,
                         "--mask-y": 50,
-                        duration: 1,
+                        duration: 4,
                         ease: "power3.out"
-                    }, 0)
-                    .to(`.${styles.cardSmall}`, {
-                        "--rotate-deg": 0,
-                        "--mask-x": 50,
-                        "--mask-y": 50,
-                        duration: 1,
+                    }, "<")
+                    .to([`.${styles.marker}`, `.${styles.cardShadowMiddle}`], {
+                        opacity: 0,
+                        duration: 2,
                         ease: "power3.out"
-                    }, 0);
+                    }, '<');
 
             } else {
                 // COLLAPSE
@@ -148,7 +146,12 @@ const ProjectThree = () => {
                         duration: 1,
                         ease: "power3.inOut",
                         onUpdate: () => {negateRotation(); textMove()}
-                    }, 0);
+                    }, 0)
+                    .to([`.${styles.marker}`, `.${styles.cardShadowMiddle}`], {
+                        opacity: 1,
+                        duration: 2,
+                        ease: "power3.out"
+                    }, '<');
             }
         };
 
@@ -224,9 +227,9 @@ const ProjectThree = () => {
                                 </div>
                                 <div id='marker' className={`${styles.marker}`} ref={marker}></div>
                             </div>
-                            {/* <div className={`${styles.tracking} ${styles.cardShadow} trackingContent`}></div> */}
                         </div>
-                        <div className={`${styles.trackingMiddle} ${styles.cardShadowMiddle}`}></div>
+                        <div id='marker2' className={`${styles.marker2}`}></div>
+                        {/* <div className={`${styles.trackingMiddle} ${styles.cardShadowMiddle}`}></div> */}
                     </div>
             </div>
         </section>

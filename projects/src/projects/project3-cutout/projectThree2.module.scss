@@ -85,10 +85,7 @@ $main: rgb(192, 65, 86);
             (var(--mask-width-expanded) - var(--mask-width-middle)) * var(--mask-expand, 0)
         );
 
-        --mask-current-height: calc(
-            var(--mask-height-middle) +
-            (var(--mask-height-expanded) - var(--mask-height-middle)) * var(--mask-expand, 0)
-        );
+        --mask-current-height: calc(var(--mask-current-width) / var(--mask-ratio));
 
         width: calc(var(--mask-current-width) + 2px);
         height: calc(var(--mask-current-height) + 2px);
@@ -104,7 +101,6 @@ $main: rgb(192, 65, 86);
 
     transform: rotate(calc(var(--rotate-deg) * 1deg));
     mask-image: url('./maskingTest.png');
-    // mask-size: var(--mask-width-middle) var(--mask-height-middle);
     mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
     mask-repeat: no-repeat;
 
@@ -113,10 +109,7 @@ $main: rgb(192, 65, 86);
         (var(--mask-width-expanded) - var(--mask-width-middle)) * var(--mask-expand, 0)
     );
 
-    --mask-current-height: calc(
-        var(--mask-height-middle) +
-        (var(--mask-height-expanded) - var(--mask-height-middle)) * var(--mask-expand, 0)
-    );
+    --mask-current-height: calc(var(--mask-current-width) / var(--mask-ratio));
 
     mask-size: var(--mask-current-width) var(--mask-current-height);
 }
@@ -131,28 +124,24 @@ $main: rgb(192, 65, 86);
     mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
     mask-image: url('./maskingTest.png');
     mask-repeat: no-repeat;
-    // mask-size: var(--mask-width-small) var(--mask-height-small);
     --mask-current-width: calc(
         var(--mask-width-small) +
         (var(--mask-width-expanded) - var(--mask-width-small)) * var(--mask-expand, 0)
     );
 
-    --mask-current-height: calc(
-        var(--mask-height-small) +
-        (var(--mask-height-expanded) - var(--mask-height-small)) * var(--mask-expand, 0)
-    );
+    --mask-current-height: calc(var(--mask-current-width) / var(--mask-ratio));
 
     mask-size: var(--mask-current-width) var(--mask-current-height);
 }
 
 .marker {
     position: absolute;
-    top: calc(
-        (100% - var(--mask-height-small)) * var(--mask-y) / 100 + var(--mask-height-small) /2
-    );
-    left: calc(
-        (100% - var(--mask-width-small)) * var(--mask-x) / 100 + var(--mask-width-small)/2
-    );
+    // top: calc(
+    //     (100% - var(--mask-height-small)) * var(--mask-y) / 100 + var(--mask-height-small) /2
+    // );
+    // left: calc(
+    //     (100% - var(--mask-width-small)) * var(--mask-x) / 100 + var(--mask-width-small)/2
+    // );
     transform: translate(-50%, -50%);
 
     --mask-current-width: calc(
@@ -160,30 +149,46 @@ $main: rgb(192, 65, 86);
         (var(--mask-width-expanded) - var(--mask-width-small)) * var(--mask-expand, 0)
     );
 
-    --mask-current-height: calc(
-        var(--mask-height-small) +
-        (var(--mask-height-expanded) - var(--mask-height-small)) * var(--mask-expand, 0)
+    --mask-current-height: calc(var(--mask-current-width) / var(--mask-ratio));
+
+    top: calc(
+        (100% - var(--mask-current-height)) * var(--mask-y) / 100 + var(--mask-current-height) /2
+    );
+    left: calc(
+        (100% - var(--mask-current-width)) * var(--mask-x) / 100 + var(--mask-current-width)/2
     );
 
     width: calc(var(--mask-current-width) + 2px);
     height: calc(var(--mask-current-height) + 2px);
     background-color: rgba($main, 0.1);
     box-shadow: 0 0 12px 12px inset rgba($main, 0.19), 0 0 24px 24px inset rgba($main, 0.1);
+    border: solid 4px red;
 }
 
 .marker2 {
     position: absolute;
+    
+    transform: translate(-50%, -50%);
+
+    --mask-current-width: calc(
+        var(--mask-width-middle) +
+        (var(--mask-width-expanded) - var(--mask-width-middle)) * var(--mask-expand, 0)
+    );
+
+    --mask-current-height: calc(var(--mask-current-width) / var(--mask-ratio));
     top: calc(
-        (100% - var(--mask-height-middle)) * var(--mask-y) / 100 + var(--mask-height-middle) /2
+        (100% - var(--mask-current-height)) * var(--mask-y) / 100 + var(--mask-current-height) /2
     );
     left: calc(
-        (100% - var(--mask-width-middle)) * var(--mask-x) / 100 + var(--mask-width-middle)/2
+        (100% - var(--mask-current-width)) * var(--mask-x) / 100 + var(--mask-current-width)/2
     );
-    transform: translate(-50%, -50%);
-    width: 1px;
-    height: 1px;
-    background-color: red;
-    border-radius: 50%;
+    width: calc(var(--mask-current-width) + 2px);
+    height: calc(var(--mask-current-height) + 2px);
+    // box-shadow: 0 0 12px 12px inset rgba(green, 0.19), 0 0 24px 24px inset rgba(green, 0.1);
+    // width: 10px;
+    // height: 10px;
+    border: solid 4px red;
+    // background-color: red;
 }
 
 .cardContent {

@@ -11,6 +11,7 @@ $main: rgb(192, 65, 86);
     --mask-scale-middle: 0.75;
     --mask-scale-small: 0.5;
     --mask-test: 0;
+    --mask-expand: 0;
 
     --mask-width-base: min(
         calc(100vw - 2 * var(--mask-padding)),
@@ -162,10 +163,9 @@ $main: rgb(192, 65, 86);
     height: calc(var(--mask-current-height) + 2px);
     background-color: rgba($main, 0.1);
     box-shadow: 0 0 12px 12px inset rgba($main, 0.19), 0 0 24px 24px inset rgba($main, 0.1);
-    border: solid 4px red;
 }
 
-.marker2 {
+.markerMiddle {
     position: absolute;
     
     transform: translate(-50%, -50%);
@@ -184,11 +184,7 @@ $main: rgb(192, 65, 86);
     );
     width: calc(var(--mask-current-width) + 2px);
     height: calc(var(--mask-current-height) + 2px);
-    // box-shadow: 0 0 12px 12px inset rgba(green, 0.19), 0 0 24px 24px inset rgba(green, 0.1);
-    // width: 10px;
-    // height: 10px;
-    border: solid 4px red;
-    // background-color: red;
+    box-shadow: 0 0 12px 12px inset rgba($main, 0.19), 0 0 24px 24px inset rgba($main, 0.1);
 }
 
 .cardContent {

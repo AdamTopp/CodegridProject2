@@ -11,7 +11,10 @@ $main: rgb(192, 65, 86);
     --mask-scale-middle: 0.75;
     --mask-scale-small: 0.5;
     --mask-test: 0;
-    --mask-expand: 0;
+    --mask-small-expand: 0;
+    --mask-middle-expand: 0;
+    --rotate-middle-deg: 0;
+    --rotate-small-deg: 0;
     --mask-x: 50;
     --mask-y: 50;
 
@@ -68,42 +71,43 @@ $main: rgb(192, 65, 86);
 }
 
 .cardMiddle {
-    --rotate-deg: 0;
-    --mask-expand: 0;
+    --mask-middle-expand: 0;
 
     background-color: $background;
     position: absolute;
     color: $main;
 
-    transform: rotate(calc(var(--rotate-deg) * 1deg * (1 - var(--mask-expand))));
+    transform: rotate(calc(var(--rotate-middle-deg) * 1deg * (1 - var(--mask-middle-expand))));
     mask-image: url('./maskingTest.png');
     mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
     mask-repeat: no-repeat;
 
     --mask-current-width: calc(
         var(--mask-width-middle) +
-        (var(--mask-width-expanded) - var(--mask-width-middle)) * var(--mask-expand, 0)
+        (var(--mask-width-expanded) - var(--mask-width-middle)) * var(--mask-middle-expand, 0)
     );
 
     --mask-current-height: calc(var(--mask-current-width) / var(--mask-ratio));
 
     mask-size: var(--mask-current-width) var(--mask-current-height);
+
+    --middle-angle: calc(var(--rotate-middle-deg) * 1deg * (1 - var(--mask-middle-expand)));
 }
 
 .cardSmall {
-    --rotate-deg: 0;
-    --mask-expand: 0;
+    --mask-small-expand: 0;
+    --small-angle: calc(var(--rotate-small-deg) * 1deg * (1 - var(--mask-small-expand)));
 
     color: $main;
     background-color:  $background;
 
-    transform: rotate(calc(var(--rotate-deg) * 1deg * (1 - var(--mask-expand))));
+    transform: rotate(calc(var(--rotate-small-deg) * 1deg * (1 - var(--mask-small-expand))));
     mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
     mask-image: url('./maskingTest.png');
     mask-repeat: no-repeat;
     --mask-current-width: calc(
         var(--mask-width-small) +
-        (var(--mask-width-expanded) - var(--mask-width-small)) * var(--mask-expand, 0)
+        (var(--mask-width-expanded) - var(--mask-width-small)) * var(--mask-small-expand, 0)
     );
 
     --mask-current-height: calc(var(--mask-current-width) / var(--mask-ratio));
@@ -117,7 +121,7 @@ $main: rgb(192, 65, 86);
 
     --mask-current-width: calc(
         var(--mask-width-small) +
-        (var(--mask-width-expanded) - var(--mask-width-small)) * var(--mask-expand, 0)
+        (var(--mask-width-expanded) - var(--mask-width-small)) * var(--mask-small-expand, 0)
     );
 
     --mask-current-height: calc(var(--mask-current-width) / var(--mask-ratio));
@@ -141,7 +145,7 @@ $main: rgb(192, 65, 86);
 
     --mask-current-width: calc(
         var(--mask-width-middle) +
-        (var(--mask-width-expanded) - var(--mask-width-middle)) * var(--mask-expand, 0)
+        (var(--mask-width-expanded) - var(--mask-width-middle)) * var(--mask-middle-expand, 0)
     );
 
     --mask-current-height: calc(var(--mask-current-width) / var(--mask-ratio));
@@ -177,6 +181,8 @@ $main: rgb(192, 65, 86);
     &Small {
         line-height: 0.8;
         font-size: 20rem;
+
+        transform: rotate(calc(0deg - var(--middle-angle) - var(--small-angle)));
     }
 }
 
@@ -184,32 +190,14 @@ $main: rgb(192, 65, 86);
     position: absolute;
     left: 0;
     top: 0;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) rotate(calc(var(--rotate-small-deg) * 1deg * (1 - var(--mask-small-expand))));
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
+    font-size: 25rem;
+    line-height: 0.8;
     z-index: 0;
     pointer-events: none;
-}
-
-.trackingMiddle {
-    --custom-y: 50;
-    --custom-x: 50;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    position: absolute;
-    top: calc(
-        (100% - var(--mask-height-middle)) * var(--mask-y) / 100 + var(--mask-height-middle)/2
-    );
-    left: calc(
-        (100% - var(--mask-width-middle)) * var(--mask-x) / 100 + var(--mask-width-middle)/2
-    );
-
-    transform: translate(-50%, -50%);
 }

@@ -38,16 +38,6 @@ const ProjectThree = () => {
                 top: center.y,
             });
         };
-        const negateRotation = () => {
-            const rotation = gsap.getProperty(`.${styles.cardMiddle}`, '--rotate-deg')
-            gsap.set('#contentMiddle', { rotate: -rotation})
-        }
-
-        const negateRotation2 = () => {
-            const rotation = gsap.getProperty(`.${styles.cardSmall}`, '--rotate-deg')
-            gsap.set('#contentSmall', { rotate: -rotation})
-            gsap.set(`.trackingContent`, { rotate: rotation})
-        }
 
         const xTo = gsap.quickTo(`.${styles.wrapper}`, "--mask-x", {
                 duration: followDuration,
@@ -60,21 +50,13 @@ const ProjectThree = () => {
             ease: followEasing,
             onUpdate: textMove
         });
-        const rotateTo = gsap.quickTo(`.${styles.cardMiddle}`, "--rotate-deg", {
+        const rotateTo = gsap.quickTo(`.${styles.wrapper}`, "--rotate-middle-deg", {
             duration: followDuration,
             ease: easing,
-            onUpdate: () => {
-                // textMove();
-                negateRotation();
-            }
         });
-        const rotateTo2 = gsap.quickTo(`.${styles.cardSmall}`, "--rotate-deg", {
+        const rotateTo2 = gsap.quickTo(`.${styles.wrapper}`, "--rotate-small-deg", {
             duration: followDuration,
             ease: easing,
-            onUpdate: () => {
-                // textMove();
-                negateRotation2();
-            }
         });
 
         const tl = gsap.timeline({
@@ -85,43 +67,37 @@ const ProjectThree = () => {
         });
 
         tl.to(`.${styles.cardMiddle}`, {
-            "--mask-expand": 1,
-            onUpdate: negateRotation,
+            "--mask-middle-expand": 1,
             duration: 1
         })
         .to(`.${styles.cardSmall}`, {
-             "--mask-expand": 1,
-            onUpdate: negateRotation2,
+             "--mask-small-expand": 1,
             duration: 1
-        })
+        }, "-=0.9")
 
         const handleMouseMove = (event: MouseEvent) => {
             const ref = wrapperRef?.current;
             if (ref) {
                 const w = (event.clientX - ref.offsetLeft) / ref.offsetWidth;
                 const h = event.clientY / ref.offsetHeight;
-                const xRotation = (1 - w) * 5;
-                const yRotation = (h) * 5;
+                const xRotation = (1 - w) * 15;
+                const yRotation = (h) * 15;
                 const rotationSum = xRotation + yRotation;
-                xTo.tween.duration(followDuration);
-                yTo.tween.duration(followDuration);
                 
-                    xTo(w * 100);
-                    yTo(h * 100);
-                    rotateTo(rotationSum);
-                    rotateTo2(-rotationSum);
+                xTo(w * 100);
+                yTo(h * 100);
+                rotateTo(rotationSum);
+                rotateTo2(-rotationSum * 1.5);
             }
         };
 
         const handleMouseDown = (event: MouseEvent) => {
             if (isExpanded?.current === true) {
                 console.log('Close')
-                // openCards(0)
                 tl.reverse();
                 isExpanded.current = false;
             } else {
                 console.log('Open')
-                // openCards(1)
                 tl.play()
 
                 isExpanded.current = true;
@@ -129,8 +105,6 @@ const ProjectThree = () => {
         };
 
         const handleMouseLeave = (event: MouseEvent) => {
-            xTo.tween.duration(snapDuration);
-            yTo.tween.duration(snapDuration);
             xTo(50);
             yTo(50);
         };
@@ -145,7 +119,7 @@ const ProjectThree = () => {
         if (ref) {
             ref.addEventListener("mousemove", handleMouseMove);
             ref.addEventListener("mousedown", handleMouseDown);
-            // ref.addEventListener("mouseleave", handleMouseLeave);
+            ref.addEventListener("mouseleave", handleMouseLeave);
             resizeObserver.observe(ref);
         }
         gsap.ticker.add(textMove);
@@ -156,7 +130,7 @@ const ProjectThree = () => {
                 resizeObserver.disconnect();
                 ref.removeEventListener("mousemove", handleMouseMove);
                 ref.removeEventListener("mousedown", handleMouseDown);
-                // ref.removeEventListener("mouseleave", handleMouseLeave);
+                ref.removeEventListener("mouseleave", handleMouseLeave);
             }
         };
 

@@ -26,14 +26,14 @@ $main: rgb(192, 65, 86);
     --mask-height-middle: calc((var(--mask-width-middle) / var(--mask-ratio)) - calc(var(--mask-padding) * 2));
     --mask-height-small: calc((var(--mask-width-small) / var(--mask-ratio)));
 
-    --mask-width-expanded: 100vw;
-    --mask-height-expanded: 100vh;
+    --mask-width-expanded: 120vw;
+    --mask-height-expanded: 120vh;
 }
 
 .wrapper {
     position: relative;
     width: 100%;
-    height: 100svh;
+    height: 120svh;
     overflow: hidden;
     // background-color: wheat;
     @include responsive-mask(3 / 4, 2rem, 0.75);
@@ -68,39 +68,16 @@ $main: rgb(192, 65, 86);
 
     background-color: $background;
     color: $main;
-
-    &Shadow {
-        box-shadow: 0 0 6px 6px inset rgba($main, 0.39);
-        width: calc(var(--mask-width-small) + 1px);
-        height: calc(var(--mask-height-small) + 1px);
-        transform-origin: center center;
-    }
-
-    &ShadowMiddle {
-        box-shadow: 0 0 16px 16px inset rgba($main, 0.19), 0 0 48px 48px inset rgba($main, 0.08);
-        // width: calc(var(--mask-width-middle) + 1px);
-        // height: calc(var(--mask-height-middle) + 1px);
-
-        --mask-current-width: calc(
-            var(--mask-width-middle) +
-            (var(--mask-width-expanded) - var(--mask-width-middle)) * var(--mask-expand, 0)
-        );
-
-        --mask-current-height: calc(var(--mask-current-width) / var(--mask-ratio));
-
-        width: calc(var(--mask-current-width) + 2px);
-        height: calc(var(--mask-current-height) + 2px);
-        transform-origin: center center;
-    }
 }
 
 .cardMiddle {
     --rotate-deg: 0;
+    --mask-expand: 0;
 
     background-color: $background;
     color: $main;
 
-    transform: rotate(calc(var(--rotate-deg) * 1deg));
+    transform: rotate(calc(var(--rotate-deg) * 1deg * (1 - var(--mask-expand))));
     mask-image: url('./maskingTest.png');
     mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
     mask-repeat: no-repeat;
@@ -117,11 +94,12 @@ $main: rgb(192, 65, 86);
 
 .cardSmall {
     --rotate-deg: 0;
+    --mask-expand: 0;
 
     color: $main;
     background-color:  $background;
 
-    transform: rotate(calc(var(--rotate-deg) * 1deg));
+    transform: rotate(calc(var(--rotate-deg) * 1deg * (1 - var(--mask-expand))));
     mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
     mask-image: url('./maskingTest.png');
     mask-repeat: no-repeat;
@@ -194,8 +172,8 @@ $main: rgb(192, 65, 86);
     align-items: center;
 
     position: fixed;
-    width: 100%;
-    height: 100%;
+    width: 120%;
+    height: 120%;
 
     line-height: 0.8;
     font-size: 40rem;

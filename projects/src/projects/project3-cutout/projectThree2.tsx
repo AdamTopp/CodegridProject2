@@ -75,6 +75,24 @@ const ProjectThree = () => {
             ease: 'expo',
         });
 
+        const tl = gsap.timeline({
+            paused: true,
+            defaults: {
+                ease: "power3.inOut"
+            }
+        });
+
+        tl.to(`.${styles.cardMiddle}`, {
+            "--mask-expand": 1,
+            onUpdate: negateRotation,
+            duration: 1
+        })
+        .to(`.${styles.cardSmall}`, {
+             "--mask-expand": 1,
+            onUpdate: negateRotation2,
+            duration: 1
+        })
+
         const handleMouseMove = (event: MouseEvent) => {
             const ref = wrapperRef?.current;
             if (ref) {
@@ -85,12 +103,11 @@ const ProjectThree = () => {
                 const rotationSum = xRotation + yRotation;
                 xTo.tween.duration(followDuration);
                 yTo.tween.duration(followDuration);
-                xTo(w * 100);
-                yTo(h * 100);
-                if(!isExpanded.current) {
+                
+                    xTo(w * 100);
+                    yTo(h * 100);
                     rotateTo(rotationSum);
                     rotateTo2(-rotationSum);
-                }
             }
         };
 
@@ -98,14 +115,13 @@ const ProjectThree = () => {
             if (isExpanded?.current === true) {
                 console.log('Close')
                 // openCards(0)
-                xTo.tween.resume()
+                tl.reverse();
                 isExpanded.current = false;
             } else {
                 console.log('Open')
                 // openCards(1)
-                rotateTo(0)
-                rotateTo2(0)
-                xTo.tween.pause()
+                tl.play()
+
                 isExpanded.current = true;
             }
         };

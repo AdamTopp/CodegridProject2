@@ -25,6 +25,10 @@ const ProjectThree = () => {
                 const markerRect = m.getBoundingClientRect();
                 const wrapperRect = w.getBoundingClientRect();
 
+                console.log(markerRect);
+                console.log(wrapperRect);
+                console.log('==');
+
                 const trackerX =
                     (((markerRect.left - wrapperRect.left) + (markerRect.width / 2)) / wrapperRect.width) * 100;
 
@@ -48,16 +52,16 @@ const ProjectThree = () => {
             gsap.set(`.trackingContent`, { rotate: rotation})
         }
 
-        const xTo = gsap.quickTo(`.${styles.card}`, "--mask-x", {
+        const xTo = gsap.quickTo(`.${styles.wrapper}`, "--mask-x", {
                 duration: followDuration,
                 ease: followEasing,
-                onUpdate: textMove
+                // onUpdate: textMove
             });
 
-        const yTo = gsap.quickTo(`.${styles.card}`, "--mask-y", {
+        const yTo = gsap.quickTo(`.${styles.wrapper}`, "--mask-y", {
             duration: followDuration,
             ease: followEasing,
-            onUpdate: textMove
+            // onUpdate: textMove
         });
         const rotateTo = gsap.quickTo(`.${styles.cardMiddle}`, "--rotate-deg", {
             duration: followDuration,
@@ -68,11 +72,6 @@ const ProjectThree = () => {
             duration: followDuration,
             ease: easing,
             onUpdate: negateRotation2
-        });
-
-        const openCards = gsap.quickTo(`.${styles.wrapper}`, "--mask-expand", {
-            duration: 2,
-            ease: 'expo',
         });
 
         const tl = gsap.timeline({
@@ -143,7 +142,7 @@ const ProjectThree = () => {
         if (ref) {
             ref.addEventListener("mousemove", handleMouseMove);
             ref.addEventListener("mousedown", handleMouseDown);
-            ref.addEventListener("mouseleave", handleMouseLeave);
+            // ref.addEventListener("mouseleave", handleMouseLeave);
             resizeObserver.observe(ref);
         }
 
@@ -153,7 +152,7 @@ const ProjectThree = () => {
                 resizeObserver.disconnect();
                 ref.removeEventListener("mousemove", handleMouseMove);
                 ref.removeEventListener("mousedown", handleMouseDown);
-                ref.removeEventListener("mouseleave", handleMouseLeave);
+                // ref.removeEventListener("mouseleave", handleMouseLeave);
             }
         };
 
@@ -169,11 +168,7 @@ const ProjectThree = () => {
                     </div>
                     <div className={`${styles.card} ${styles.cardMiddle}`}>
                         <div id='contentMiddle' className={`${styles.cardContent} ${styles.cardContentMiddle}`}>
-                            <div className={`${styles.tracking} trackingContent`}>
-                                <span>Part</span>
-                                <span>One</span>
-                                <span>Session</span> 
-                            </div>
+                            
                             <div className={`${styles.card} ${styles.cardSmall}`} ref={cardSmall}>
                                 <div id='contentSmall' className={`${styles.cardContent} ${styles.cardContentSmall}`}>
                                     <span>Part</span>
@@ -181,6 +176,11 @@ const ProjectThree = () => {
                                     <span>Session</span> 
                                 </div>
                                 <div id='marker' className={`${styles.marker}`} ref={marker}></div>
+                            </div>
+                            <div className={`${styles.tracking} trackingContent`}>
+                                {/* <span>Part</span>
+                                <span>One</span>
+                                <span>Session</span>  */}
                             </div>
                         </div>
                         <div id='marker2' className={`${styles.markerMiddle}`}></div>

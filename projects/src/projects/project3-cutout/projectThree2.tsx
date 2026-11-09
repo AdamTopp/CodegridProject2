@@ -3,14 +3,17 @@ import { useRef } from 'react';
 import styles from './projectThree2.module.scss';
 import { useGSAP } from '@gsap/react';
 import { gsap } from "gsap";
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, MotionPathPlugin);
 
 const ProjectThree = () => {
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const markerWrapperRef = useRef<HTMLDivElement>(null);
     const marker = useRef<HTMLDivElement>(null);
     const cardSmall = useRef<HTMLDivElement>(null);
     const isExpanded = useRef(false);
+    const trackingRef = useRef<HTMLDivElement>(null);
 
     const followDuration = 1;
     const snapDuration = 2.5;
@@ -19,28 +22,22 @@ const ProjectThree = () => {
 
     useGSAP(() => {
         const textMove = () => {
-            const m = marker?.current;
-            const w = wrapperRef?.current;
-            if (m && w) {
-                const markerRect = m.getBoundingClientRect();
-                const wrapperRect = w.getBoundingClientRect();
+            const target = marker.current;
+            const parent = markerWrapperRef.current;
+            const tracking = trackingRef.current;
 
-                console.log(markerRect);
-                console.log(wrapperRect);
-                console.log('==');
+            if (!target || !parent || !tracking) return;
 
-                const trackerX =
-                    (((markerRect.left - wrapperRect.left) + (markerRect.width / 2)) / wrapperRect.width) * 100;
+            const center = MotionPathPlugin.convertCoordinates(target, parent, {
+                x: target.offsetWidth / 2,
+                y: target.offsetHeight / 2,
+            });
 
-                const trackerY =
-                    (((markerRect.top - wrapperRect.top) + (markerRect.height / 2)) / wrapperRect.height) * 100;
-
-                gsap.set(`.${styles.tracking}`, {
-                    "--custom-x": trackerX,
-                    "--custom-y": trackerY
-                });
-            }
-        }
+            gsap.set(tracking, {
+                left: center.x,
+                top: center.y,
+            });
+        };
         const negateRotation = () => {
             const rotation = gsap.getProperty(`.${styles.cardMiddle}`, '--rotate-deg')
             gsap.set('#contentMiddle', { rotate: -rotation})
@@ -55,23 +52,29 @@ const ProjectThree = () => {
         const xTo = gsap.quickTo(`.${styles.wrapper}`, "--mask-x", {
                 duration: followDuration,
                 ease: followEasing,
-                // onUpdate: textMove
+                onUpdate: textMove
             });
 
         const yTo = gsap.quickTo(`.${styles.wrapper}`, "--mask-y", {
             duration: followDuration,
             ease: followEasing,
-            // onUpdate: textMove
+            onUpdate: textMove
         });
         const rotateTo = gsap.quickTo(`.${styles.cardMiddle}`, "--rotate-deg", {
             duration: followDuration,
             ease: easing,
-            onUpdate: negateRotation
+            onUpdate: () => {
+                // textMove();
+                negateRotation();
+            }
         });
         const rotateTo2 = gsap.quickTo(`.${styles.cardSmall}`, "--rotate-deg", {
             duration: followDuration,
             ease: easing,
-            onUpdate: negateRotation2
+            onUpdate: () => {
+                // textMove();
+                negateRotation2();
+            }
         });
 
         const tl = gsap.timeline({
@@ -145,9 +148,10 @@ const ProjectThree = () => {
             // ref.addEventListener("mouseleave", handleMouseLeave);
             resizeObserver.observe(ref);
         }
-
+        gsap.ticker.add(textMove);
         return () => {
             const ref = wrapperRef?.current;
+            gsap.ticker.remove(textMove);
             if (ref) {
                 resizeObserver.disconnect();
                 ref.removeEventListener("mousemove", handleMouseMove);
@@ -166,7 +170,12 @@ const ProjectThree = () => {
                         <span>One</span>
                         <span>Session</span> 
                     </div>
-                    <div className={`${styles.card} ${styles.cardMiddle}`}>
+                    <div className={`${styles.card} ${styles.cardMiddle}`} ref={markerWrapperRef}>
+                        <div className={`${styles.tracking} trackingContent`} ref={trackingRef}>
+                            <span>Part</span>
+                            <span>One</span>
+                            <span>Session</span> 
+                        </div>
                         <div id='contentMiddle' className={`${styles.cardContent} ${styles.cardContentMiddle}`}>
                             
                             <div className={`${styles.card} ${styles.cardSmall}`} ref={cardSmall}>
@@ -176,11 +185,6 @@ const ProjectThree = () => {
                                     <span>Session</span> 
                                 </div>
                                 <div id='marker' className={`${styles.marker}`} ref={marker}></div>
-                            </div>
-                            <div className={`${styles.tracking} trackingContent`}>
-                                {/* <span>Part</span>
-                                <span>One</span>
-                                <span>Session</span>  */}
                             </div>
                         </div>
                         <div id='marker2' className={`${styles.markerMiddle}`}></div>

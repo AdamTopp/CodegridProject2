@@ -68,10 +68,12 @@ const ProjectThree = () => {
 
         tl.to(`.${styles.cardMiddle}`, {
             "--mask-middle-expand": 1,
+             "--mask-middle-brightness": 1,
             duration: 1
         })
         .to(`.${styles.cardSmall}`, {
              "--mask-small-expand": 1,
+             "--mask-small-brightness": 1,
             duration: 1
         }, "-=0.9")
 

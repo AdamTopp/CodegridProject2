@@ -92,6 +92,9 @@ $main: rgb(192, 65, 86);
     mask-size: var(--mask-current-width) var(--mask-current-height);
 
     --middle-angle: calc(var(--rotate-middle-deg) * 1deg * (1 - var(--mask-middle-expand)));
+
+    // background-color: coral;
+    background-color: hsl(0 0% calc((1 - var(--mask-middle-expand)) * 100%));
 }
 
 .cardSmall {
@@ -113,6 +116,7 @@ $main: rgb(192, 65, 86);
     --mask-current-height: calc(var(--mask-current-width) / var(--mask-ratio));
 
     mask-size: var(--mask-current-width) var(--mask-current-height);
+    background-color: white;
 }
 
 .marker {
@@ -190,13 +194,13 @@ $main: rgb(192, 65, 86);
     position: absolute;
     left: 0;
     top: 0;
-    transform: translate(-50%, -50%) rotate(calc(var(--rotate-small-deg) * 1deg * (1 - var(--mask-small-expand))));
+    transform: translate(-50%, -50%) rotate(calc(var(--rotate-small-deg) * 1deg * (1 - var(--mask-small-expand)))) scale(calc(1 + var(--mask-small-expand) * 3));
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
-    font-size: 25rem;
+    font-size: 20rem;
     line-height: 0.8;
     z-index: 0;
     pointer-events: none;

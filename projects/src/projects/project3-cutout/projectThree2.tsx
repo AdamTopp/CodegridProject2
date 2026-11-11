@@ -4,6 +4,7 @@ import styles from './projectThree2.module.scss';
 import { useGSAP } from '@gsap/react';
 import { gsap } from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+import Logo from './tempLogo';
 
 gsap.registerPlugin(useGSAP, MotionPathPlugin);
 
@@ -141,6 +142,17 @@ const ProjectThree = () => {
 
     return (
         <section className={styles.section}>
+            <div className={styles.content}>
+                <div className={styles.logo}><Logo /></div>
+                <div className={styles.headline}>
+                    <div>Test</div>
+                    <div>Test</div>
+                    <div>Test</div>
+                </div>
+                <div className={styles.button}>01. Stanisław Wyspiański</div>
+                <div className={styles.button}>02. Jan Kochanowski</div>
+                <div className={styles.button}>03. Adam Mickiewicz</div>
+            </div>
             <div className={`${styles.card} ${styles.cardFirst}`}>
                 <span>Part</span>
                 <span>One</span>

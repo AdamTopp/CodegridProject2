@@ -5,6 +5,55 @@
 $background: rgb(243, 243, 243);
 $main: rgb(192, 65, 86);
 
+
+.content {
+    background-color: lightgreen;
+
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 45%;
+    min-width: 100px;
+    min-height: 100px;
+    position: absolute;
+    left: 0;
+    border: 4px solid salmon;
+}
+
+.headline {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+
+    font-size: 4rem;
+    color: $main;
+
+    border: 2px solid rgb(162, 205, 92);
+}
+
+.logo {
+    svg {
+        height: 42px;
+        color: $main;
+    }
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    padding: 24px 0;
+    width: 100%;
+
+    font-size: 4rem;
+    color: $main;
+    border: 2px solid purple;
+}
+
+
+
+// Cards section
 @mixin responsive-mask($ratio: 3 / 4, $padding: 12px, $modifier: 1) {
     --mask-ratio: #{$ratio};
     --mask-padding: #{$padding};
@@ -34,7 +83,7 @@ $main: rgb(192, 65, 86);
 }
 
 .wrapper {
-    position: relative;
+    position: absolute;
     width: 60%;
     height: 120svh;
     @include responsive-mask(3 / 4, 2rem, 0.75);
@@ -73,11 +122,12 @@ $main: rgb(192, 65, 86);
     position: absolute;
     width: 60%;
     left: auto;
+    background-color: transparent;
 }
 
 .cardMiddle {
 
-    background-color: $background;
+    background-color: transparent;
     position: absolute;
     color: $main;
 

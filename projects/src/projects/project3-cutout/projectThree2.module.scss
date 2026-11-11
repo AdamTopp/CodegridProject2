@@ -35,9 +35,8 @@ $main: rgb(192, 65, 86);
 
 .wrapper {
     position: relative;
-    width: 100%;
+    width: 60%;
     height: 120svh;
-    overflow: hidden;
     @include responsive-mask(3 / 4, 2rem, 0.75);
 }
 
@@ -47,8 +46,9 @@ $main: rgb(192, 65, 86);
     display: flex;
     justify-content: end;
     align-items: center;
-    background-color: darkmagenta;
+    background-color: $background;
     overflow: hidden;
+    position: relative;
 }
 
 .card {
@@ -56,7 +56,6 @@ $main: rgb(192, 65, 86);
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     position: absolute;
     top: 0;
     left: 0;
@@ -70,8 +69,13 @@ $main: rgb(192, 65, 86);
     color: $main;
 }
 
+.cardFirst {
+    position: absolute;
+    width: 60%;
+    left: auto;
+}
+
 .cardMiddle {
-    --mask-middle-expand: 0;
 
     background-color: $background;
     position: absolute;
@@ -98,7 +102,6 @@ $main: rgb(192, 65, 86);
 }
 
 .cardSmall {
-    --mask-small-expand: 0;
     --small-angle: calc(var(--rotate-small-deg) * 1deg * (1 - var(--mask-small-expand)));
 
     color: $main;

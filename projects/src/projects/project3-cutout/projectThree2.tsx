@@ -66,12 +66,13 @@ const ProjectThree = () => {
             }
         });
 
-        tl.to(`.${styles.cardMiddle}`, {
+        tl.to(`.${styles.wrapper}`, {
             "--mask-middle-expand": 1,
              "--mask-middle-brightness": 1,
+             width: '100%',
             duration: 1
         })
-        .to(`.${styles.cardSmall}`, {
+        .to(`.${styles.wrapper}`, {
              "--mask-small-expand": 1,
              "--mask-small-brightness": 1,
             duration: 1
@@ -140,12 +141,12 @@ const ProjectThree = () => {
 
     return (
         <section className={styles.section}>
-            <div className={styles.wrapper} ref={wrapperRef}>
-                    <div className={styles.card}>
-                        <span>Part</span>
-                        <span>One</span>
-                        <span>Session</span> 
-                    </div>
+            <div className={`${styles.card} ${styles.cardFirst}`}>
+                <span>Part</span>
+                <span>One</span>
+                <span>Session</span> 
+            </div>
+            <div className={styles.wrapper} ref={wrapperRef}> 
                     <div className={`${styles.card} ${styles.cardMiddle}`} ref={markerWrapperRef}>
                         <div className={`${styles.tracking} trackingContent`} ref={trackingRef}>
                             <span>Part</span>

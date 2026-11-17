@@ -17,7 +17,7 @@ const ProjectThree = () => {
     const trackingRef = useRef<HTMLDivElement>(null);
     const trackingRef2 = useRef<HTMLDivElement>(null);
 
-    const followDuration = 1;
+    const followDuration = 3;
     const snapDuration = 2.5;
     const followEasing = "back.out";
     const easing = "power3.out";
@@ -161,26 +161,28 @@ const ProjectThree = () => {
                         <div className={styles.headlineHeaderCursive}>Adam Mickiewicz</div>
                     </div>
                 </div>
-                <div className={styles.button}>
-                    <span className={styles.buttonContent}>
-                        <span className={styles.buttonSubtext}>01.</span>
-                        <span className={styles.buttonName}>Stanisław Wyspiański</span>
-                    </span>
-                    <span className={styles.buttonSubtext}>REACT, WEBFLOW, FIGMA</span>
-                </div>
-                <div className={styles.button}>
-                    <span className={styles.buttonContent}>
-                        <span className={styles.buttonSubtext}>02.</span>
-                        <span className={styles.buttonName}>Jan Kochanowski</span>
-                    </span>
-                    <span className={styles.buttonSubtext}>REACT, WEBFLOW, FIGMA</span>
-                </div>
-                <div className={styles.button}>
-                    <span className={styles.buttonContent}>
-                        <span className={styles.buttonSubtext}>03.</span>
-                        <span className={styles.buttonName}>Adam Mickiewicz</span>
-                    </span>
-                    <span className={styles.buttonSubtext}>REACT, WEBFLOW, FIGMA</span>
+                <div className={styles.buttons}>
+                    <div className={styles.button}>
+                        <span className={styles.buttonContent}>
+                            <span className={styles.buttonSubtext}>01.</span>
+                            <span className={styles.buttonName}>Stanisław Wyspiański</span>
+                        </span>
+                        <span className={styles.buttonSubtext}>REACT, WEBFLOW, FIGMA</span>
+                    </div>
+                    <div className={styles.button}>
+                        <span className={styles.buttonContent}>
+                            <span className={styles.buttonSubtext}>02.</span>
+                            <span className={styles.buttonName}>Jan Kochanowski</span>
+                        </span>
+                        <span className={styles.buttonSubtext}>REACT, WEBFLOW, FIGMA</span>
+                    </div>
+                    <div className={styles.button}>
+                        <span className={styles.buttonContent}>
+                            <span className={styles.buttonSubtext}>03.</span>
+                            <span className={styles.buttonName}>Adam Mickiewicz</span>
+                        </span>
+                        <span className={styles.buttonSubtext}>REACT, WEBFLOW, FIGMA</span>
+                    </div>
                 </div>
             </div>
             <div className={styles.wrapper} ref={wrapperRef}>

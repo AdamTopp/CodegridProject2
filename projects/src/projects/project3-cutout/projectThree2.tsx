@@ -1,11 +1,9 @@
-
 import { useRef } from 'react';
 import styles from './projectThree2.module.scss';
 import { useGSAP } from '@gsap/react';
 import { gsap } from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import Logo from './tempLogo';
-
 gsap.registerPlugin(useGSAP, MotionPathPlugin);
 
 const ProjectThree = () => {
@@ -15,6 +13,7 @@ const ProjectThree = () => {
     const cardSmall = useRef<HTMLDivElement>(null);
     const isExpanded = useRef(false);
     const trackingRef = useRef<HTMLDivElement>(null);
+    const trackingRef2 = useRef<HTMLDivElement>(null);
 
     const followDuration = 1;
     const snapDuration = 2.5;
@@ -26,8 +25,9 @@ const ProjectThree = () => {
             const target = marker.current;
             const parent = markerWrapperRef.current;
             const tracking = trackingRef.current;
+            const tracking2 = trackingRef2.current;
 
-            if (!target || !parent || !tracking) return;
+            if (!target || !parent || !tracking || !tracking2) return;
 
             const center = MotionPathPlugin.convertCoordinates(target, parent, {
                 x: target.offsetWidth / 2,
@@ -41,23 +41,15 @@ const ProjectThree = () => {
         };
 
         const xTo = gsap.quickTo(`.${styles.wrapper}`, "--mask-x", {
-                duration: followDuration,
-                ease: followEasing,
-                onUpdate: textMove
-            });
+            duration: followDuration,
+            ease: followEasing,
+            onUpdate: textMove
+        });
 
         const yTo = gsap.quickTo(`.${styles.wrapper}`, "--mask-y", {
             duration: followDuration,
             ease: followEasing,
             onUpdate: textMove
-        });
-        const rotateTo = gsap.quickTo(`.${styles.wrapper}`, "--rotate-middle-deg", {
-            duration: followDuration,
-            ease: easing,
-        });
-        const rotateTo2 = gsap.quickTo(`.${styles.wrapper}`, "--rotate-small-deg", {
-            duration: followDuration,
-            ease: easing,
         });
 
         const tl = gsap.timeline({
@@ -69,13 +61,13 @@ const ProjectThree = () => {
 
         tl.to(`.${styles.wrapper}`, {
             "--mask-middle-expand": 1,
-             "--mask-middle-brightness": 1,
-             width: '100%',
+            "--mask-middle-brightness": 1,
+            width: '100%',
             duration: 1
         })
         .to(`.${styles.wrapper}`, {
-             "--mask-small-expand": 1,
-             "--mask-small-brightness": 1,
+            "--mask-small-expand": 1,
+            "--mask-small-brightness": 1,
             duration: 1
         }, "-=0.9")
 
@@ -84,14 +76,8 @@ const ProjectThree = () => {
             if (ref) {
                 const w = (event.clientX - ref.offsetLeft) / ref.offsetWidth;
                 const h = event.clientY / ref.offsetHeight;
-                const xRotation = (1 - w) * 15;
-                const yRotation = (h) * 15;
-                const rotationSum = xRotation + yRotation;
-                
                 xTo(w * 100);
                 yTo(h * 100);
-                rotateTo(rotationSum);
-                rotateTo2(-rotationSum * 1.5);
             }
         };
 
@@ -145,39 +131,57 @@ const ProjectThree = () => {
             <div className={styles.content}>
                 <div className={styles.logo}><Logo /></div>
                 <div className={styles.headline}>
-                    <div>Test</div>
-                    <div>Test</div>
-                    <div>Test</div>
+                    <div className={styles.headlineHeader}>
+                        <div>Selected</div>
+                        <div className={styles.headlineHeaderCursive}>Adam Mickiewicz</div>
+                    </div>
                 </div>
-                <div className={styles.button}>01. Stanisław Wyspiański</div>
-                <div className={styles.button}>02. Jan Kochanowski</div>
-                <div className={styles.button}>03. Adam Mickiewicz</div>
+                <div className={styles.button}>
+                    <span className={styles.buttonContent}>
+                        <span className={styles.buttonSubtext}>01.</span>
+                        <span className={styles.buttonName}>Stanisław Wyspiański</span>
+                    </span>
+                    <span className={styles.buttonSubtext}>REACT, WEBFLOW, FIGMA</span>
+                </div>
+                <div className={styles.button}>
+                    <span className={styles.buttonContent}>
+                        <span className={styles.buttonSubtext}>02.</span>
+                        <span className={styles.buttonName}>Jan Kochanowski</span>
+                    </span>
+                    <span className={styles.buttonSubtext}>REACT, WEBFLOW, FIGMA</span>
+                </div>
+                <div className={styles.button}>
+                    <span className={styles.buttonContent}>
+                        <span className={styles.buttonSubtext}>03.</span>
+                        <span className={styles.buttonName}>Adam Mickiewicz</span>
+                    </span>
+                    <span className={styles.buttonSubtext}>REACT, WEBFLOW, FIGMA</span>
+                </div>
             </div>
-            <div className={`${styles.card} ${styles.cardFirst}`}>
+            <div className={`${styles.card} ${styles.cardFirst}`} ref={trackingRef2}>
                 <span>Part</span>
                 <span>One</span>
-                <span>Session</span> 
+                <span>Session</span>
             </div>
-            <div className={styles.wrapper} ref={wrapperRef}> 
-                    <div className={`${styles.card} ${styles.cardMiddle}`} ref={markerWrapperRef}>
-                        <div className={`${styles.tracking} trackingContent`} ref={trackingRef}>
-                            <span>Part</span>
-                            <span>One</span>
-                            <span>Session</span> 
-                        </div>
-                        <div id='contentMiddle' className={`${styles.cardContent} ${styles.cardContentMiddle}`}>
-                            
-                            <div className={`${styles.card} ${styles.cardSmall}`} ref={cardSmall}>
-                                <div id='contentSmall' className={`${styles.cardContent} ${styles.cardContentSmall}`}>
-                                    <span>Part</span>
-                                    <span>One</span>
-                                    <span>Session</span> 
-                                </div>
-                                <div id='marker' className={`${styles.marker}`} ref={marker}></div>
-                            </div>
-                        </div>
-                        <div id='marker2' className={`${styles.markerMiddle}`}></div>
+            <div className={styles.wrapper} ref={wrapperRef}>
+                <div className={`${styles.card} ${styles.cardMiddle}`} ref={markerWrapperRef}>
+                    <div id="cardContent2" className={`${styles.tracking} trackingContent`} ref={trackingRef}>
+                        <span>Part</span>
+                        <span>One</span>
+                        <span>Session</span>
                     </div>
+                    <div id='contentMiddle' className={`${styles.cardContent} ${styles.cardContentMiddle}`}>
+                        <div className={`${styles.card} ${styles.cardSmall}`} ref={cardSmall}>
+                            <div id='contentSmall' className={`${styles.cardContent} ${styles.cardContentSmall}`}>
+                                <span>Part</span>
+                                <span>One</span>
+                                <span>Session</span>
+                            </div>
+                            <div id='marker' className={`${styles.marker}`} ref={marker}></div>
+                        </div>
+                    </div>
+                    <div id='marker2' className={`${styles.markerMiddle}`}></div>
+                </div>
             </div>
         </section>
     )

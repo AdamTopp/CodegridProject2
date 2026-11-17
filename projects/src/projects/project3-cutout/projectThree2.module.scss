@@ -7,7 +7,6 @@ $main: rgb(192, 65, 86);
 
 
 .content {
-
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -16,6 +15,8 @@ $main: rgb(192, 65, 86);
     min-height: 100px;
     position: absolute;
     left: 0;
+    padding-top: 10px;
+    padding-left: 20px;
 }
 
 .headline {
@@ -25,14 +26,31 @@ $main: rgb(192, 65, 86);
     justify-content: center;
     align-items: start;
 
-    font-size: 4rem;
     color: $main;
 
+    &Header {
+        font-size: 4rem;
+        // letter-spacing: -1.5%;
+        display: flex;
+        flex-direction: column;
+
+        &Straight {
+            font-family: "kepler-3-subhead-condensed", sans-serif;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        &Cursive {
+            font-family: "kepler-3-subhead-condensed", sans-serif;
+            font-weight: 400;
+            font-style: italic;
+        }
+    }
 }
 
 .logo {
     svg {
-        height: 42px;
+        height: 24px;
         color: $main;
     }
 }
@@ -40,11 +58,35 @@ $main: rgb(192, 65, 86);
 .button {
     display: flex;
     align-items: center;
-    padding: 24px 0;
+    justify-content: space-between;
+    padding: 16px 0;
     width: 100%;
 
-    font-size: 4rem;
+    font-family: "kepler-3-subhead-condensed", sans-serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 2.2rem;
     color: $main;
+    border-bottom: 1px solid $main;
+    letter-spacing: -1.5%;
+    cursor: pointer;
+
+    &:last-child {
+        border-bottom: none;
+    }
+    &Content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    &Subtext {
+        font-family: roboto-mono, monospace;
+        font-weight: 400;
+        font-size: 1rem;
+        font-style: normal;
+        text-transform: uppercase;
+    }
 }
 
 
@@ -58,8 +100,6 @@ $main: rgb(192, 65, 86);
     --mask-test: 0;
     --mask-small-expand: 0;
     --mask-middle-expand: 0;
-    --rotate-middle-deg: 0;
-    --rotate-small-deg: 0;
     --mask-x: 50;
     --mask-y: 50;
 
@@ -76,11 +116,19 @@ $main: rgb(192, 65, 86);
 
     --mask-width-expanded: 120vw;
     --mask-height-expanded: 120vh;
+
+    --testing: calc(
+        (1 - var(--mask-x) / 100) * 15 +
+        (var(--mask-y) / 100) * 15
+    );
+
+    --rotate-middle-deg: var(--testing);
+    --rotate-small-deg: calc(var(--testing) * -1.5);
 }
 
 .wrapper {
     position: absolute;
-    width: 60%;
+    width: 50%;
     height: 120svh;
     @include responsive-mask(3 / 4, 2rem, 0.75);
 }
@@ -107,22 +155,25 @@ $main: rgb(192, 65, 86);
     width: 100%;
     height: 100%;
 
-    font-size: 40rem;
+    font-size: 25rem;
     line-height: 0.8;
+
+    transform: translate(0, -10%) rotate(-10deg);
 
     background-color: $background;
     color: $main;
+    font-family: "marlide-display-variable",sans-serif;
+    font-variation-settings: "wght" 350;
 }
 
 .cardFirst {
     position: absolute;
-    width: 60%;
+    width: 50%;
     left: auto;
     background-color: transparent;
 }
 
 .cardMiddle {
-
     background-color: transparent;
     position: absolute;
     color: $main;
@@ -143,7 +194,6 @@ $main: rgb(192, 65, 86);
 
     --middle-angle: calc(var(--rotate-middle-deg) * 1deg * (1 - var(--mask-middle-expand)));
 
-    // background-color: coral;
     background-color: hsl(0 0% calc((1 - var(--mask-middle-expand)) * 100%));
 }
 
@@ -151,7 +201,7 @@ $main: rgb(192, 65, 86);
     --small-angle: calc(var(--rotate-small-deg) * 1deg * (1 - var(--mask-small-expand)));
 
     color: $main;
-    background-color:  $background;
+    background-color: $background;
 
     transform: rotate(calc(var(--rotate-small-deg) * 1deg * (1 - var(--mask-small-expand))));
     mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
@@ -193,7 +243,6 @@ $main: rgb(192, 65, 86);
 
 .markerMiddle {
     position: absolute;
-    
     transform: translate(-50%, -50%);
 
     --mask-current-width: calc(
@@ -224,16 +273,14 @@ $main: rgb(192, 65, 86);
     height: 120%;
 
     line-height: 0.8;
-    font-size: 40rem;
 
     &Middle {
         line-height: 1;
-        font-size: 30rem;
     }
 
     &Small {
         line-height: 0.8;
-        font-size: 20rem;
+        font-size: 10rem;
 
         transform: rotate(calc(0deg - var(--middle-angle) - var(--small-angle)));
     }

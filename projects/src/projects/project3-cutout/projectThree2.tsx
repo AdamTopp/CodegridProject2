@@ -10,6 +10,8 @@ const ProjectThree = () => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const markerWrapperRef = useRef<HTMLDivElement>(null);
     const marker = useRef<HTMLDivElement>(null);
+    const marker2 = useRef<HTMLDivElement>(null);
+    const firstCardRef = useRef<HTMLDivElement>(null);
     const cardSmall = useRef<HTMLDivElement>(null);
     const isExpanded = useRef(false);
     const trackingRef = useRef<HTMLDivElement>(null);
@@ -23,21 +25,44 @@ const ProjectThree = () => {
     useGSAP(() => {
         const textMove = () => {
             const target = marker.current;
-            const parent = markerWrapperRef.current;
+            const middleCard = markerWrapperRef.current;
             const tracking = trackingRef.current;
+
+            if (target && middleCard && tracking) {
+                const center = MotionPathPlugin.convertCoordinates(
+                    target,
+                    middleCard,
+                    {
+                        x: target.offsetWidth / 2,
+                        y: target.offsetHeight / 2,
+                    }
+                );
+
+                gsap.set(tracking, {
+                    left: center.x,
+                    top: center.y,
+                });
+            }
+
+            const middleMarker = marker2.current;
+            const firstCard = firstCardRef.current;
             const tracking2 = trackingRef2.current;
 
-            if (!target || !parent || !tracking || !tracking2) return;
+            if (middleMarker && firstCard && tracking2) {
+                const center = MotionPathPlugin.convertCoordinates(
+                    middleMarker,
+                    firstCard,
+                    {
+                        x: middleMarker.offsetWidth / 2,
+                        y: middleMarker.offsetHeight / 2,
+                    }
+                );
 
-            const center = MotionPathPlugin.convertCoordinates(target, parent, {
-                x: target.offsetWidth / 2,
-                y: target.offsetHeight / 2,
-            });
-
-            gsap.set(tracking, {
-                left: center.x,
-                top: center.y,
-            });
+                gsap.set(tracking2, {
+                    left: center.x,
+                    top: center.y,
+                });
+            }
         };
 
         const xTo = gsap.quickTo(`.${styles.wrapper}`, "--mask-x", {
@@ -158,12 +183,14 @@ const ProjectThree = () => {
                     <span className={styles.buttonSubtext}>REACT, WEBFLOW, FIGMA</span>
                 </div>
             </div>
-            <div className={`${styles.card} ${styles.cardFirst}`} ref={trackingRef2}>
-                <span>Part</span>
-                <span>One</span>
-                <span>Session</span>
-            </div>
             <div className={styles.wrapper} ref={wrapperRef}>
+                <div className={`${styles.card}`} ref={firstCardRef}>
+                    <div className={`${styles.trackingOuter}`} ref={trackingRef2}>
+                        <span>Part</span>
+                        <span>One</span>
+                        <span>Session</span>
+                    </div>
+                </div>
                 <div className={`${styles.card} ${styles.cardMiddle}`} ref={markerWrapperRef}>
                     <div id="cardContent2" className={`${styles.tracking} trackingContent`} ref={trackingRef}>
                         <span>Part</span>
@@ -180,7 +207,7 @@ const ProjectThree = () => {
                             <div id='marker' className={`${styles.marker}`} ref={marker}></div>
                         </div>
                     </div>
-                    <div id='marker2' className={`${styles.markerMiddle}`}></div>
+                    <div id='marker2' className={`${styles.markerMiddle}`} ref={marker2}></div>
                 </div>
             </div>
         </section>

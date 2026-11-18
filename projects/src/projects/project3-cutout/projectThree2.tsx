@@ -6,6 +6,20 @@ import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import Logo from './tempLogo';
 gsap.registerPlugin(useGSAP, MotionPathPlugin);
 
+interface MovingContext {
+    ySmall: boolean,
+    xSmall: boolean,
+    xMid: boolean,
+    yMid: boolean,
+};
+
+const MOVING_CONTEXT = {
+    ySmall: false,
+    xSmall: false,
+    xMid: false,
+    yMid: false,
+}
+
 const ProjectThree = () => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const markerWrapperRef = useRef<HTMLDivElement>(null);
@@ -16,7 +30,9 @@ const ProjectThree = () => {
     const isExpanded = useRef(false);
     const trackingRef = useRef<HTMLDivElement>(null);
     const trackingRef2 = useRef<HTMLDivElement>(null);
-
+    const isMoving = useRef<MovingContext>(MOVING_CONTEXT);
+    const isReturning = useRef(false);
+const resetCall = useRef<gsap.core.Tween | null>(null);
     const followDuration = 3;
     const snapDuration = 2.5;
     const followEasing = "back.out";
@@ -68,13 +84,29 @@ const ProjectThree = () => {
         const xTo = gsap.quickTo(`.${styles.wrapper}`, "--mask-x", {
             duration: followDuration,
             ease: followEasing,
-            onUpdate: textMove
+            onUpdate: textMove,
+            onComplete: () => mouseMoveComplete("xSmall")
         });
 
         const yTo = gsap.quickTo(`.${styles.wrapper}`, "--mask-y", {
             duration: followDuration,
             ease: followEasing,
-            onUpdate: textMove
+            onUpdate: textMove,
+            onComplete: () => mouseMoveComplete("ySmall")
+        });
+
+        const xToMid = gsap.quickTo(`.${styles.wrapper}`, "--mask-mid-x", {
+            duration: followDuration,
+            ease: followEasing,
+            onUpdate: textMove,
+            onComplete: () => mouseMoveComplete("xMid")
+        });
+
+        const yToMid = gsap.quickTo(`.${styles.wrapper}`, "--mask-mid-y", {
+            duration: followDuration,
+            ease: followEasing,
+            onUpdate: textMove,
+            onComplete: () => mouseMoveComplete("yMid")
         });
 
         const tl = gsap.timeline({
@@ -96,32 +128,73 @@ const ProjectThree = () => {
             duration: 1
         }, "-=0.9")
 
+       const radiusMid = 1 / 6; // 0 = no movement, 1 = full movement
+       const radiusSmall = 1 / 5; // 0 = no movement, 1 = full movement
+
+        const mapCursorToMask = (position: number, radius: number) => {
+            const normalized = position * 2 - 1;
+            return 50 + normalized * radius * 50;
+        };
+
         const handleMouseMove = (event: MouseEvent) => {
             const ref = wrapperRef?.current;
+
             if (ref) {
-                const w = (event.clientX - ref.offsetLeft) / ref.offsetWidth;
-                const h = event.clientY / ref.offsetHeight;
-                xTo(w * 100);
-                yTo(h * 100);
+                resetCall.current?.kill();
+                isReturning.current = false;
+
+                const rect = ref.getBoundingClientRect();
+
+                const w = (event.clientX - rect.left) / rect.width;
+                const h = (event.clientY - rect.top) / rect.height;
+
+                isMoving.current = {
+                    xSmall: true,
+                    ySmall: true,
+                    xMid: true,
+                    yMid: true,
+                };
+
+                xTo(mapCursorToMask(w, radiusSmall));
+                yTo(mapCursorToMask(h, radiusSmall));
+
+                xToMid(mapCursorToMask(w, radiusMid));
+                yToMid(mapCursorToMask(h, radiusMid));
             }
         };
 
         const handleMouseDown = (event: MouseEvent) => {
             if (isExpanded?.current === true) {
-                console.log('Close')
                 tl.reverse();
                 isExpanded.current = false;
             } else {
-                console.log('Open')
                 tl.play()
 
                 isExpanded.current = true;
             }
         };
 
-        const handleMouseLeave = (event: MouseEvent) => {
-            xTo(50);
-            yTo(50);
+        const mouseMoveComplete = (key: keyof MovingContext) => {
+            if (isReturning.current) return;
+
+            isMoving.current[key] = false;
+
+            const allComplete = Object.values(isMoving.current).every(
+                (value) => !value
+            );
+
+            if (allComplete) {
+                resetCall.current?.kill();
+
+                resetCall.current = gsap.delayedCall(1, () => {
+                    isReturning.current = true;
+
+                    xTo(50);
+                    yTo(50);
+                    xToMid(50);
+                    yToMid(50);
+                });
+            }
         };
 
         const resizeObserver = new ResizeObserver(() => {
@@ -134,7 +207,6 @@ const ProjectThree = () => {
         if (ref) {
             ref.addEventListener("mousemove", handleMouseMove);
             ref.addEventListener("mousedown", handleMouseDown);
-            ref.addEventListener("mouseleave", handleMouseLeave);
             resizeObserver.observe(ref);
         }
         gsap.ticker.add(textMove);
@@ -145,11 +217,11 @@ const ProjectThree = () => {
                 resizeObserver.disconnect();
                 ref.removeEventListener("mousemove", handleMouseMove);
                 ref.removeEventListener("mousedown", handleMouseDown);
-                ref.removeEventListener("mouseleave", handleMouseLeave);
             }
         };
 
     });
+
 
     return (
         <section className={styles.section}>
@@ -188,23 +260,23 @@ const ProjectThree = () => {
             <div className={styles.wrapper} ref={wrapperRef}>
                 <div className={`${styles.card}`} ref={firstCardRef}>
                     <div className={`${styles.trackingOuter}`} ref={trackingRef2}>
-                        <span>Part</span>
-                        <span>One</span>
-                        <span>Session</span>
+                        <span>Open</span>
+                        <span>Studio</span>
+                        <span>Night</span>
                     </div>
                 </div>
                 <div className={`${styles.card} ${styles.cardMiddle}`} ref={markerWrapperRef}>
                     <div id="cardContent2" className={`${styles.tracking} trackingContent`} ref={trackingRef}>
-                        <span>Part</span>
-                        <span>One</span>
-                        <span>Session</span>
+                        <span>Open</span>
+                        <span>Studio</span>
+                        <span>Night</span>
                     </div>
                     <div id='contentMiddle' className={`${styles.cardContent} ${styles.cardContentMiddle}`}>
                         <div className={`${styles.card} ${styles.cardSmall}`} ref={cardSmall}>
                             <div id='contentSmall' className={`${styles.cardContent} ${styles.cardContentSmall}`}>
-                                <span>Part</span>
-                                <span>One</span>
-                                <span>Session</span>
+                                <span>Open</span>
+                                <span>Studio</span>
+                                <span>Night</span>
                             </div>
                             <div id='marker' className={`${styles.marker}`} ref={marker}></div>
                         </div>

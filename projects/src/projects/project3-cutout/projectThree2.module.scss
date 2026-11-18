@@ -10,7 +10,7 @@ $main: rgb(192, 65, 86);
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 45%;
+    width: 40%;
     min-width: 100px;
     min-height: 100px;
     position: absolute;
@@ -30,7 +30,6 @@ $main: rgb(192, 65, 86);
 
     &Header {
         font-size: 4rem;
-        // letter-spacing: -1.5%;
         display: flex;
         flex-direction: column;
 
@@ -58,17 +57,6 @@ $main: rgb(192, 65, 86);
 .buttons {
     position: relative;
     isolation: isolate;
-    z-index: 1;
-
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        background-color: $background;
-        opacity: 95%;
-        filter: blur(12px);
-    }
 }
 
 .button {
@@ -118,6 +106,8 @@ $main: rgb(192, 65, 86);
     --mask-middle-expand: 0;
     --mask-x: 50;
     --mask-y: 50;
+    --mask-mid-x: 50;
+    --mask-mid-y: 50;
 
     --mask-width-base: min(
         calc(100vw - 2 * var(--mask-padding)),
@@ -133,13 +123,27 @@ $main: rgb(192, 65, 86);
     --mask-width-expanded: 120vw;
     --mask-height-expanded: 120vh;
 
-    --testing: calc(
-        (1 - var(--mask-x) / 100) * 15 +
-        (var(--mask-y) / 100) * 15
+    --base-rotation-middle: -15;
+    --base-rotation-small: 0;
+    --change-rotation-middle: -10;
+    --change-rotation-small: 15;
+
+    --testingMiddle: calc(
+        (1 - var(--mask-mid-x) / 100) * var(--change-rotation-middle) +
+        (var(--mask-mid-y) / 100) * var(--change-rotation-middle)
     );
 
-    --rotate-middle-deg: var(--testing);
-    --rotate-small-deg: calc(var(--testing) * -1.5);
+    --testingSmall: calc(
+        (1 - var(--mask-x) / 100) * var(--change-rotation-small) +
+        (var(--mask-y) / 100) * var(--change-rotation-small)
+    );
+
+    --rotate-middle-deg: var(--testingMiddle);
+    --rotate-small-deg: calc(var(--testingSmall));
+
+    --text-outer: 25vw;
+    --text-middle: 20vw;
+    --text-small: 15vw;
 }
 
 .wrapper {
@@ -171,15 +175,22 @@ $main: rgb(192, 65, 86);
     width: 100%;
     height: 100%;
 
-    line-height: 0.8;
+    line-height: 0.9;
 
     transform: translate(0, -10%) rotate(-10deg);
 
     background-color: $background;
     color: $main;
-    font-family: "marlide-display-variable",sans-serif;
-    font-variation-settings: "wght" 450;
+    // font-family: "marlide-display-variable",sans-serif;
+    // font-family: "vincente", serif;
+    // font-variation-settings: "wght" 450;
+    
+     font-family: "kepler-3-subhead-condensed", sans-serif;
+    font-weight: 400;
     pointer-events: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    z-index: 2;
 }
 
 .cardFirst {
@@ -196,7 +207,7 @@ $main: rgb(192, 65, 86);
 
     transform: rotate(calc(var(--rotate-middle-deg) * 1deg * (1 - var(--mask-middle-expand))));
     mask-image: url('./maskingTest.png');
-    mask-position: calc(var(--mask-x) * 1%) calc(var(--mask-y) * 1%);
+    mask-position: calc(var(--mask-mid-x) * 1%) calc(var(--mask-mid-y) * 1%);
     mask-repeat: no-repeat;
 
     --mask-current-width: calc(
@@ -268,10 +279,10 @@ $main: rgb(192, 65, 86);
 
     --mask-current-height: calc(var(--mask-current-width) / var(--mask-ratio));
     top: calc(
-        (100% - var(--mask-current-height)) * var(--mask-y) / 100 + var(--mask-current-height) /2
+        (100% - var(--mask-current-height)) * var(--mask-mid-y) / 100 + var(--mask-current-height) /2
     );
     left: calc(
-        (100% - var(--mask-current-width)) * var(--mask-x) / 100 + var(--mask-current-width)/2
+        (100% - var(--mask-current-width)) * var(--mask-mid-x) / 100 + var(--mask-current-width)/2
     );
     width: calc(var(--mask-current-width) + 2px);
     height: calc(var(--mask-current-height) + 2px);
@@ -292,12 +303,12 @@ $main: rgb(192, 65, 86);
 
     &Middle {
         line-height: 1;
-        font-size: 30rem;
+        font-size: var(--text-middle);
     }
 
     &Small {
         line-height: 0.8;
-        font-size: 10rem;
+        font-size: var(--text-small);
 
         transform: rotate(calc(0deg - var(--middle-angle) - var(--small-angle)));
     }
@@ -313,8 +324,8 @@ $main: rgb(192, 65, 86);
     justify-content: center;
     align-items: center;
 
-    font-size: 30rem;
-    line-height: 0.8;
+    font-size: var(--text-middle);
+    line-height: 0.9;
     z-index: 0;
     pointer-events: none;
 }
@@ -327,8 +338,9 @@ $main: rgb(192, 65, 86);
     flex-direction: column;
     align-items: center;
     width: max-content;
-    font-size: 30vw;
-    line-height: 0.7;
-    transform: translate(-50%, -50%) rotate(calc(10deg + var(--rotate-middle-deg) * -1deg * (1 - var(--mask-middle-expand))));
+    font-size: var(--text-outer);
+    line-height: 0.9;
+    transform: translate(-50%, -50%) rotate(calc(var(--base-rotation-middle) * 1deg + var(--rotate-middle-deg) * -1deg));
     pointer-events: none;
+    z-index: 0;
 }
